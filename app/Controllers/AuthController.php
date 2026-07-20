@@ -34,7 +34,9 @@ class AuthController extends BaseController
             return redirect()->to('/client/dashboard');
         }
 
-        return view('auth/login');
+        return view('auth/login', [
+            'validation' => service('validation'),
+        ]);
     }
 
     /**

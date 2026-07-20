@@ -114,7 +114,7 @@
                 </span>
                 <div class="text-white">
                     <span><?= session()->get('telephone') ?? '' ?></span>
-                    <a href="<?= base_url('/auth/logout') ?>" class="btn btn-outline-light btn-sm ms-3">
+                    <a href="<?= base_url('/deconnexion') ?>" class="btn btn-outline-light btn-sm ms-3">
                         <i class="fas fa-sign-out-alt"></i> Déconnexion
                     </a>
                 </div>

@@ -15,6 +15,7 @@ class ClientModel extends Model
         'telephone',
         'nom',
         'statut',
+        'password',
     ];
     protected $useTimestamps = false;
     protected $validationRules = [

@@ -11,6 +11,7 @@ $routes->get('/', 'Home::index');
 $routes->get('login', 'AuthController::index');
 $routes->post('connexion', 'AuthController::connexion');
 $routes->get('deconnexion', 'AuthController::deconnexion');
+$routes->get('logout', 'AuthController::deconnexion');
 
 // Routes client (protégées par ClientAuthFilter)
 $routes->group('client', ['filter' => 'clientauth'], function ($routes) {
