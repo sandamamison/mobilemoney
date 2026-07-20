@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Opérateur</title>
+    <title>Gains Opérateur</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -49,6 +49,12 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .navbar a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
         .container {
             flex: 1;
             padding: 3rem;
@@ -59,7 +65,7 @@
         }
 
         .header {
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .header h2 {
@@ -74,10 +80,33 @@
             margin: 0;
         }
 
+        .actions {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 999px;
+            padding: 0.9rem 1.25rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), var(--gradient-end)); color: #fff; }
+        .btn-secondary { background: rgba(148, 163, 184, 0.12); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.08); }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .card {
@@ -86,7 +115,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
         }
@@ -99,17 +127,6 @@
             width: 100%;
             height: 4px;
             background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .card:hover::before {
-            opacity: 1;
         }
 
         .card-title {
@@ -131,63 +148,68 @@
         }
 
         .card-value .unit {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-secondary);
             font-weight: 400;
         }
 
+        .note {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.8rem;
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-            }
+            .container { padding: 1.5rem; }
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <h1>MobileMoney</h1>
-        <div style="display:flex;align-items:center;gap:1.5rem;">
-            <a href="<?= site_url('gains') ?>" style="color:var(--text-secondary);text-decoration:none;font-weight:600;">Gains</a>
-            <a href="<?= site_url('gains/historique') ?>" style="color:var(--text-secondary);text-decoration:none;font-weight:600;">Historique</a>
-            <div style="font-weight: 600; color: var(--text-secondary);">ESPACE OPÉRATEUR</div>
-        </div>
+        <a href="<?= site_url('gains/historique') ?>">Historique global</a>
     </nav>
 
     <div class="container">
         <div class="header">
-            <h2>Tableau de bord</h2>
-            <p>Vue d'ensemble des activités de la plateforme.</p>
+            <h2>Calcul des gains opérateur</h2>
+            <p>Total des frais générés par les opérations validées de type retrait et transfert.</p>
         </div>
+
+        <div class="actions">
+            <a class="btn btn-primary" href="<?= site_url('gains/historique') ?>">Voir l'historique global</a>
+            <a class="btn btn-secondary" href="<?= site_url('operateur') ?>">Retour au dashboard</a>
+        </div>
+
+        <?php
+            $gainsByCode = [];
+            foreach (($gainsParType ?? []) as $gain) {
+                $gainsByCode[$gain['code']] = $gain;
+            }
+            $retrait = $gainsByCode['RETRAIT'] ?? ['nombre_operations' => 0, 'gain_total' => 0, 'libelle' => 'Retrait'];
+            $transfert = $gainsByCode['TRANSFERT'] ?? ['nombre_operations' => 0, 'gain_total' => 0, 'libelle' => 'Transfert'];
+        ?>
 
         <div class="grid">
             <div class="card">
-                <div class="card-title">Clients</div>
-                <div class="card-value"><?= number_format($nombreDeClients ?? 0, 0, ',', ' ') ?></div>
+                <div class="card-title">Retraits</div>
+                <div class="card-value"><?= number_format((int) ($retrait['gain_total'] ?? 0), 0, ',', ' ') ?> <span class="unit">Ar</span></div>
+                <div class="note"><?= number_format((int) ($retrait['nombre_operations'] ?? 0), 0, ',', ' ') ?> opération(s)</div>
             </div>
 
             <div class="card">
-                <div class="card-title">Comptes</div>
-                <div class="card-value"><?= number_format($nombreDeComptes ?? 0, 0, ',', ' ') ?></div>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">Opérations</div>
-                <div class="card-value"><?= number_format($nombreDOperations ?? 0, 0, ',', ' ') ?></div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Solde total</div>
-                <div class="card-value"><?= number_format($totalDesSoldes ?? 0, 0, ',', ' ') ?> <span class="unit">Ar</span></div>
+                <div class="card-title">Transferts</div>
+                <div class="card-value"><?= number_format((int) ($transfert['gain_total'] ?? 0), 0, ',', ' ') ?> <span class="unit">Ar</span></div>
+                <div class="note"><?= number_format((int) ($transfert['nombre_operations'] ?? 0), 0, ',', ' ') ?> opération(s)</div>
             </div>
 
             <div class="card" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2)); border-color: rgba(139, 92, 246, 0.3);">
-                <div class="card-title" style="color: #e2e8f0;">Gains Frais</div>
+                <div class="card-title" style="color: #e2e8f0;">Gain global</div>
                 <div class="card-value" style="font-size: 3.5rem; color: #fff;">
-                    <?= number_format($totalDesFrais ?? 0, 0, ',', ' ') ?> <span class="unit" style="color: rgba(255,255,255,0.7);">Ar</span>
+                    <?= number_format((int) ($gainGlobal ?? 0), 0, ',', ' ') ?> <span class="unit" style="color: rgba(255,255,255,0.7);">Ar</span>
                 </div>
+                <div class="note" style="color: rgba(255,255,255,0.75);">Somme des frais validés sur les retraits et transferts.</div>
             </div>
         </div>
     </div>

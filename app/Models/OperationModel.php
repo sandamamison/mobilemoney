@@ -20,10 +20,25 @@ class OperationModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    public function totalgain(){
-        $sql = 'SELECT SUM(frais) AS total FROM operations';
+    public function gainsParType(): array
+    {
+        $sql = "SELECT code, libelle, nombre_operations, gain_total
+                FROM vue_gains_operateur
+                ORDER BY CASE code
+                    WHEN 'RETRAIT' THEN 1
+                    WHEN 'TRANSFERT' THEN 2
+                    ELSE 3
+                END, libelle";
+
+        return $this->db->query($sql)->getResultArray();
+    }
+
+    public function totalgain()
+    {
+        $sql = 'SELECT COALESCE(SUM(gain_total), 0) AS total FROM vue_gains_operateur';
         $query = $this->db->query($sql);
-        return $query->getRow()->total ?? 0;
+
+        return (int) ($query->getRow()->total ?? 0);
     }
 
 }
