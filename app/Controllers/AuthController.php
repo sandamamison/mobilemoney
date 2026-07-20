@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\ClientModel;
 use App\Models\CompteModel;
 use App\Models\PrefixeOperateurModel;
-use App\Validation\PhoneValidator;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -44,10 +43,6 @@ class AuthController extends BaseController
      */
     public function connexion()
     {
-        if ($this->request->getMethod() !== 'post') {
-            return redirect()->to('/login');
-        }
-
         $telephone = $this->request->getPost('telephone');
         // Nettoyer le numéro
         $telephoneClean = preg_replace('/\D/', '', (string) $telephone);
@@ -102,6 +97,7 @@ class AuthController extends BaseController
         }
 
         // Créer la session
+        session()->regenerate(true);
         session()->set([
             'client_id'    => $client['id'],
             'compte_id'    => $compte['id'],
