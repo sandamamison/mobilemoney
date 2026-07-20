@@ -48,6 +48,90 @@ class OperationService
     }
 
     /**
+     * Répartit équitablement un montant total entre plusieurs destinataires.
+     */
+    public function preparerTransfertsMultiples(array $numeros, int $montantTotal, bool $inclureFraisRetrait = false): array
+    {
+        if ($montantTotal <= 0) {
+            throw new InvalidArgumentException('Le montant total doit être supérieur à zéro');
+        }
+        if (count($numeros) < 2) {
+            throw new InvalidArgumentException('Saisissez au moins deux destinataires');
+        }
+        if (count($numeros) > 20) {
+            throw new InvalidArgumentException('Un envoi multiple est limité à 20 destinataires');
+        }
+
+        $operateurs = [];
+        foreach ($numeros as $numero) {
+            $operateur = $this->detectionService->detecter((string) $numero);
+            if (isset($operateurs[$operateur['telephone']])) {
+                throw new InvalidArgumentException('Numéro en double : ' . $operateur['telephone']);
+            }
+            $operateurs[$operateur['telephone']] = $operateur;
+        }
+
+        $nombre = count($operateurs);
+        $partBase = intdiv($montantTotal, $nombre);
+        $reste = $montantTotal % $nombre;
+        $envois = [];
+        foreach (array_values($operateurs) as $index => $operateur) {
+            $part = $partBase + ($index < $reste ? 1 : 0);
+            $calcul = $this->fraisService->calculerTransfert($part, $operateur, $inclureFraisRetrait);
+            $envois[] = [
+                'telephone' => $operateur['telephone'],
+                'operateur' => $operateur,
+                'calcul' => $calcul,
+                'inclure_frais_retrait' => $inclureFraisRetrait,
+            ];
+        }
+
+        return [
+            'envois' => $envois,
+            'nombre_destinataires' => $nombre,
+            'montant_total_envoye' => $montantTotal,
+            'frais_total' => array_sum(array_column(array_column($envois, 'calcul'), 'frais_total')),
+            'total_debite' => array_sum(array_column(array_column($envois, 'calcul'), 'total_debite')),
+            'inclure_frais_retrait' => $inclureFraisRetrait,
+        ];
+    }
+
+    /**
+     * Les transactions imbriquées de CodeIgniter gardent tous les envois sous
+     * la transaction extérieure : un seul échec annule le groupe complet.
+     */
+    public function executerTransfertsMultiples(int $compteSourceId, array $preparation): array
+    {
+        $envois = $preparation['envois'] ?? [];
+        if (count($envois) < 2) {
+            throw new InvalidArgumentException('Préparation d’envoi multiple invalide');
+        }
+
+        $groupeReference = 'MULTI-' . date('YmdHis') . '-' . strtoupper(bin2hex(random_bytes(3)));
+        $resultats = [];
+        $this->db->transBegin();
+        try {
+            foreach ($envois as $envoi) {
+                $resultats[] = $this->executerTransfert($compteSourceId, $envoi, $groupeReference);
+            }
+            if (!$this->db->transStatus()) {
+                throw new RuntimeException('Échec de la transaction multiple');
+            }
+            $this->db->transCommit();
+
+            return [
+                'groupe_reference' => $groupeReference,
+                'nombre_operations' => count($resultats),
+                'total_debite' => array_sum(array_column($resultats, 'total_debite')),
+                'resultats' => $resultats,
+            ];
+        } catch (Throwable $e) {
+            $this->db->transRollback();
+            throw $e;
+        }
+    }
+
+    /**
      * Exécute une préparation retournée par preparerTransfert().
      */
     public function executerTransfert(int $compteSourceId, array $preparation, ?string $groupeReference = null): array

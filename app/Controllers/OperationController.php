@@ -3,11 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\BaremeFraisModel;
-use App\Models\ClientModel;
 use App\Models\CompteModel;
 use App\Models\MouvementCompteModel;
 use App\Models\OperationModel;
 use App\Models\TypeOperationModel;
+use App\Services\OperationService;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -15,21 +15,21 @@ use Psr\Log\LoggerInterface;
 class OperationController extends BaseController
 {
     protected $compteModel;
-    protected $clientModel;
     protected $operationModel;
     protected $typeOperationModel;
     protected $baremeFraisModel;
     protected $mouvementModel;
+    protected $operationService;
 
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->compteModel = new CompteModel();
-        $this->clientModel = new ClientModel();
         $this->operationModel = new OperationModel();
         $this->typeOperationModel = new TypeOperationModel();
         $this->baremeFraisModel = new BaremeFraisModel();
         $this->mouvementModel = new MouvementCompteModel();
+        $this->operationService = new OperationService();
     }
 
     public function depot()
@@ -231,100 +231,87 @@ class OperationController extends BaseController
 
     public function doTransfert()
     {
-        $telephone = preg_replace('/\D/', '', (string) $this->request->getPost('telephone'));
-        $montantSaisi = $this->request->getPost('montant');
-
-        if (!preg_match('/^\d{10}$/', $telephone)) {
-            return redirect()->back()->withInput()->with('error', 'Le numéro du destinataire doit contenir exactement 10 chiffres');
-        }
-
-        if (filter_var($montantSaisi, FILTER_VALIDATE_INT) === false || (int) $montantSaisi <= 0) {
-            return redirect()->back()->withInput()->with('error', 'Le montant du transfert doit être un entier supérieur à 0');
-        }
-
-        if ($telephone === session()->get('telephone')) {
-            return redirect()->back()->withInput()->with('error', 'Vous ne pouvez pas effectuer un transfert vers votre propre compte');
-        }
-
-        $destinataire = $this->clientModel->getByTelephone($telephone);
-        if (!$destinataire || ($destinataire['statut'] ?? null) !== 'ACTIF') {
-            return redirect()->back()->withInput()->with('error', 'Destinataire introuvable ou bloqué');
-        }
-
-        $compteSourceId = (int) session()->get('compte_id');
-        $compteDestination = $this->compteModel->getByClientId((int) $destinataire['id']);
-        if (!$compteDestination || ($compteDestination['statut'] ?? null) !== 'ACTIF') {
-            return redirect()->back()->withInput()->with('error', 'Le compte du destinataire est indisponible');
-        }
-
-        $montant = (int) $montantSaisi;
-        $typeTransfert = $this->typeOperationModel->getByCode('TRANSFERT');
-        if (!$typeTransfert) {
-            return redirect()->back()->withInput()->with('error', 'Le type d’opération TRANSFERT est indisponible');
-        }
-
-        $frais = $this->baremeFraisModel->getFraisForAmount((int) $typeTransfert['id'], $montant);
-        $db = db_connect();
-        $db->transBegin();
-
         try {
-            $compteSource = $this->compteModel->find($compteSourceId);
-            $compteDestination = $this->compteModel->find((int) $compteDestination['id']);
+            $telephone = preg_replace('/\D/', '', (string) $this->request->getPost('telephone'));
+            $montant = filter_var($this->request->getPost('montant'), FILTER_VALIDATE_INT);
+            $inclureRetrait = $this->request->getPost('inclure_frais_retrait') === '1';
 
-            if (!$compteSource || ($compteSource['statut'] ?? null) !== 'ACTIF') {
-                throw new \RuntimeException('Le compte source est indisponible');
+            if ($montant === false || $montant <= 0) {
+                throw new \InvalidArgumentException('Le montant doit être un entier supérieur à zéro');
+            }
+            if ($telephone === session()->get('telephone')) {
+                throw new \InvalidArgumentException('Vous ne pouvez pas transférer vers votre propre compte');
             }
 
-            $soldeSourceAvant = (int) $compteSource['solde'];
-            $soldeDestinationAvant = (int) $compteDestination['solde'];
-            $totalDebite = $montant + $frais;
+            // Les données sont recalculées au moment de la confirmation pour éviter toute modification côté navigateur.
+            $preparation = $this->operationService->preparerTransfert($telephone, (int) $montant, $inclureRetrait);
 
-            if ($soldeSourceAvant < $totalDebite) {
-                throw new \RuntimeException('Solde insuffisant pour effectuer ce transfert');
+            if ($this->request->getPost('action') === 'confirmer') {
+                $resultat = $this->operationService->executerTransfert((int) session()->get('compte_id'), $preparation);
+
+                return redirect()->to('/client/dashboard')->with(
+                    'success',
+                    'Transfert effectué avec succès. Référence : ' . $resultat['reference'],
+                );
             }
 
-            $operationId = $this->operationModel->insert([
-                'reference' => OperationModel::generateReference(),
-                'type_operation_id' => $typeTransfert['id'],
-                'compte_source_id' => $compteSourceId,
-                'compte_destination_id' => $compteDestination['id'],
-                'montant' => $montant,
-                'frais' => $frais,
-                'statut' => 'VALIDEE',
+            $compte = $this->compteModel->find((int) session()->get('compte_id'));
+
+            return view('client/transfert', [
+                'title' => 'Confirmer le transfert',
+                'solde' => (int) ($compte['solde'] ?? 0),
+                'resume' => $preparation,
             ]);
-
-            if ($operationId === false
-                || !$this->compteModel->update($compteSourceId, ['solde' => $soldeSourceAvant - $totalDebite])
-                || !$this->compteModel->update((int) $compteDestination['id'], ['solde' => $soldeDestinationAvant + $montant])
-                || !$this->mouvementModel->insert([
-                    'operation_id' => $operationId,
-                    'compte_id' => $compteSourceId,
-                    'sens' => MouvementCompteModel::DEBIT,
-                    'montant' => $totalDebite,
-                    'solde_avant' => $soldeSourceAvant,
-                    'solde_apres' => $soldeSourceAvant - $totalDebite,
-                ])
-                || !$this->mouvementModel->insert([
-                    'operation_id' => $operationId,
-                    'compte_id' => $compteDestination['id'],
-                    'sens' => MouvementCompteModel::CREDIT,
-                    'montant' => $montant,
-                    'solde_avant' => $soldeDestinationAvant,
-                    'solde_apres' => $soldeDestinationAvant + $montant,
-                ])) {
-                throw new \RuntimeException('Impossible d’enregistrer le transfert');
-            }
-
-            if ($db->transStatus() === false) {
-                throw new \RuntimeException('Échec de la transaction');
-            }
-
-            $db->transCommit();
         } catch (\Throwable $e) {
-            $db->transRollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
+    }
 
-        return redirect()->to('/client/dashboard')->with('success', 'Transfert effectué avec succès');
+    public function transfertMultiple()
+    {
+        $compte = $this->compteModel->find((int) session()->get('compte_id'));
+
+        return view('client/transfert_multiple', [
+            'title' => 'Envoi multiple',
+            'solde' => (int) ($compte['solde'] ?? 0),
+        ]);
+    }
+
+    public function doTransfertMultiple()
+    {
+        try {
+            $texteNumeros = (string) $this->request->getPost('numeros');
+            $numeros = array_values(array_filter(array_map(
+                'trim',
+                preg_split('/[\r\n,;]+/', $texteNumeros) ?: [],
+            )));
+            $montantTotal = filter_var($this->request->getPost('montant_total'), FILTER_VALIDATE_INT);
+            $inclureRetrait = $this->request->getPost('inclure_frais_retrait') === '1';
+            if ($montantTotal === false || $montantTotal <= 0) {
+                throw new \InvalidArgumentException('Le montant total doit être un entier supérieur à zéro');
+            }
+
+            // Recalcul complet aussi bien pour l’aperçu que pour la confirmation.
+            $preparation = $this->operationService->preparerTransfertsMultiples($numeros, (int) $montantTotal, $inclureRetrait);
+
+            if ($this->request->getPost('action') === 'confirmer') {
+                $resultat = $this->operationService->executerTransfertsMultiples((int) session()->get('compte_id'), $preparation);
+
+                return redirect()->to('/client/dashboard')->with(
+                    'success',
+                    $resultat['nombre_operations'] . ' transferts effectués. Groupe : ' . $resultat['groupe_reference'],
+                );
+            }
+
+            $compte = $this->compteModel->find((int) session()->get('compte_id'));
+            return view('client/transfert_multiple', [
+                'title' => 'Confirmer l’envoi multiple',
+                'solde' => (int) ($compte['solde'] ?? 0),
+                'resume' => $preparation,
+                'numeros_saisis' => implode("\n", $numeros),
+            ]);
+        } catch (\Throwable $e) {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
     }
 }
