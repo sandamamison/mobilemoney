@@ -26,3 +26,8 @@ $routes->post('/bareme/update/(:num)', 'BaremeController::update/$1');
 $routes->post('/bareme/delete', 'BaremeController::delete');
 $routes->match(['get', 'post'], '/bareme/test', 'BaremeController::testFrais');
 $routes->get('/bareme/api/frais', 'BaremeController::apiFrais');
+
+$routes->get('/comptes', 'CompteController::index');
+$routes->get('/comptes/show/(:num)', 'CompteController::show/$1');
+$routes->post('/comptes/bloque/(:num)', 'CompteController::bloque/$1');
+$routes->post('/comptes/debloque/(:num)', 'CompteController::debloque/$1');
