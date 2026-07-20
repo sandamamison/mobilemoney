@@ -11,9 +11,22 @@ class GainController extends BaseController
     {
         $operationModel = new OperationModel();
 
+        $gainsExternes = $operationModel->gainsTransfertsExternesParOperateur();
+
         $data = [
-            'gainsParType' => $operationModel->gainsParType(),
-            'gainGlobal'   => $operationModel->totalgain(),
+            // Vue globale existante
+            'gainsParType'            => $operationModel->gainsParType(),
+            'gainGlobal'              => $operationModel->totalgain(),
+            // Séparation détaillée
+            'gainsRetraits'           => $operationModel->gainsRetraits(),
+            'gainsInternes'           => $operationModel->gainsTransfertsInternes(),
+            'gainsExternesParOp'      => $gainsExternes,
+            'gainNetExternes'         => $operationModel->gainNetTransfertsExternes(),
+            // Total commissions dues aux opérateurs
+            'totalCommissions'        => (int) array_sum(array_map(
+                fn($l) => (int)$l['frais_total'] - (int)$l['gain_net'],
+                $gainsExternes
+            )),
         ];
 
         return view('gain/index', $data);

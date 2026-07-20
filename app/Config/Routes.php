@@ -57,3 +57,24 @@ $routes->get('/comptes', 'CompteController::index');
 $routes->get('/comptes/show/(:num)', 'CompteController::show/$1');
 $routes->post('/comptes/bloque/(:num)', 'CompteController::bloque/$1');
 $routes->post('/comptes/debloque/(:num)', 'CompteController::debloque/$1');
+
+// Routes Autres Opérateurs
+$routes->get('/autres-operateurs', 'AutreOperateurController::index');
+$routes->get('/autres-operateurs/create', 'AutreOperateurController::create');
+$routes->post('/autres-operateurs/store', 'AutreOperateurController::store');
+$routes->get('/autres-operateurs/edit/(:num)', 'AutreOperateurController::edit/$1');
+$routes->post('/autres-operateurs/update/(:num)', 'AutreOperateurController::update/$1');
+$routes->post('/autres-operateurs/toggle/(:num)', 'AutreOperateurController::toggleActif/$1');
+$routes->post('/autres-operateurs/delete', 'AutreOperateurController::delete');
+
+// Routes Préfixes Externes
+$routes->get('/prefixes-externes', 'PrefixeAutreOperateurController::index');
+$routes->get('/prefixes-externes/create', 'PrefixeAutreOperateurController::create');
+$routes->post('/prefixes-externes/store', 'PrefixeAutreOperateurController::store');
+$routes->get('/prefixes-externes/edit/(:num)', 'PrefixeAutreOperateurController::edit/$1');
+$routes->post('/prefixes-externes/update/(:num)', 'PrefixeAutreOperateurController::update/$1');
+$routes->post('/prefixes-externes/toggle/(:num)', 'PrefixeAutreOperateurController::toggleActif/$1');
+$routes->post('/prefixes-externes/delete', 'PrefixeAutreOperateurController::delete');
+
+// Routes Règlements (Montants à envoyer)
+$routes->get('/reglements', 'ReglementOperateurController::index');

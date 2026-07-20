@@ -48,3 +48,101 @@
 - [x] Implémenter `historique()` (dans OperateurController ou autre)
 - [x] Afficher Date, Type, Montant, Frais
 - [x] Ajouter les filtres (date, type, numéro)
+
+# V2
+
+## 1. GÃ©rer les autres opÃ©rateurs
+
+Fichiers principaux :
+
+`app/Models/AutreOperateurModel.php`
+
+`app/Controllers/AutreOperateurController.php`
+
+- [x] Ajouter les autres opÃ©rateurs
+- [x] Modifier leur nom et leur statut
+- [x] DÃ©finir le pourcentage de commission
+- [x] Activer ou dÃ©sactiver un opÃ©rateur
+
+---
+
+## 2. Configurer les prÃ©fixes externes
+
+Fichiers principaux :
+
+`app/Models/PrefixeAutreOperateurModel.php`
+
+`app/Views/operateur/autres_operateurs.php`
+
+- [x] Ajouter les prÃ©fixes comme `032` et `031`
+- [x] Associer chaque prÃ©fixe Ã  un opÃ©rateur
+- [x] EmpÃªcher les doublons
+- [x] Activer ou dÃ©sactiver un prÃ©fixe
+
+---
+
+## 3. SÃ©parer les gains
+
+Fichiers principaux :
+
+`app/Controllers/GainController.php`
+
+`app/Views/operateur/gains.php`
+
+- [x] Afficher les gains de notre opÃ©rateur
+- [x] Afficher sÃ©parÃ©ment les gains des transferts externes
+- [x] Afficher les frais de retrait
+- [x] Afficher les commissions reÃ§ues par opÃ©rateur
+
+---
+
+## 4. Afficher les montants Ã  envoyer
+
+Fichiers principaux :
+
+`app/Controllers/ReglementOperateurController.php`
+
+`app/Views/operateur/montants_a_envoyer.php`
+
+- [x] Regrouper les transferts par opÃ©rateur
+- [x] Additionner les montants envoyÃ©s
+- [x] Ajouter les frais de retrait inclus
+- [x] Afficher le total Ã  envoyer Ã  chaque opÃ©rateur
+
+---
+
+## 5. Mettre Ã  jour le tableau de bord opÃ©rateur
+
+Fichier principal :
+
+`app/Views/operateur/dashboard.php`
+
+- [x] Ajouter le nombre dâ€™opÃ©rateurs externes
+- [x] Ajouter les gains internes
+- [x] Ajouter les gains externes
+- [x] Ajouter les montants Ã  rÃ©gler
+- [x] Ajouter les liens vers les nouvelles pages
+
+---
+
+## 6. Tester et publier
+
+- [x] Tester lâ€™ajout dâ€™un opÃ©rateur
+- [x] Tester lâ€™ajout dâ€™un prÃ©fixe
+- [x] Tester la modification dâ€™une commission
+- [x] VÃ©rifier la sÃ©paration des gains
+- [x] VÃ©rifier les montants Ã  envoyer
+- [x] Mettre Ã  jour `Taches.md`
+- [x] Faire un commit aprÃ¨s chaque grande Ã©tape
+- [x] Publier la branche `feature/v2-operateur`
+
+---
+
+## Ordre conseillÃ©
+
+1. Gestion des opÃ©rateurs
+2. Configuration des prÃ©fixes
+3. Calcul et sÃ©paration des gains
+4. Montants Ã  envoyer
+5. Tableau de bord
+6. Tests et publication
