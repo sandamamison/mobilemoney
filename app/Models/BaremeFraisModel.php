@@ -30,6 +30,20 @@ class BaremeFraisModel extends Model
     }
 
     /**
+     * Retourne null lorsqu'aucune tranche active ne couvre le montant.
+     */
+    public function findFraisForAmount(int $typeOperationId, int $amount): ?int
+    {
+        $bareme = $this->where('type_operation_id', $typeOperationId)
+            ->where('montant_min <=', $amount)
+            ->where('montant_max >=', $amount)
+            ->where('actif', 1)
+            ->first();
+
+        return $bareme ? (int) $bareme['frais'] : null;
+    }
+
+    /**
      * Récupérer tous les barèmes pour un type d'opération
      */
     public function getByTypeOperation(int $typeOperationId): array
