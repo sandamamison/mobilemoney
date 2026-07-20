@@ -233,4 +233,99 @@ Fichier :
 - [X] Afficher une erreur si aucune tranche n’existe
 - [X] Calculer :
 
-```text
+
+# PLAN SIMPLE — VERSION 2 CÔTÉ CLIENT
+
+## 1. Reconnaître l’opérateur du numéro
+
+Fichier principal :
+
+`app/Services/DetectionOperateurService.php`
+
+- [ ] Vérifier le format du numéro
+- [ ] Lire les trois premiers chiffres
+- [ ] Identifier notre opérateur ou un autre opérateur
+- [ ] Refuser les préfixes inconnus ou désactivés
+
+---
+
+## 2. Calculer les frais du transfert
+
+Fichier principal :
+
+`app/Services/FraisService.php`
+
+- [ ] Trouver les frais de transfert
+- [ ] Ajouter la commission pour un autre opérateur
+- [ ] Calculer les frais de retrait si l’option est cochée
+- [ ] Afficher le total à débiter
+
+---
+
+## 3. Améliorer le transfert simple
+
+Fichiers :
+
+`app/Controllers/OperationController.php`
+
+`app/Views/client/transfert.php`
+
+- [ ] Ajouter l’option « Inclure les frais de retrait »
+- [ ] Afficher l’opérateur du destinataire
+- [ ] Afficher un résumé avant confirmation
+- [ ] Programmer le transfert interne et externe
+
+---
+
+## 4. Créer l’envoi multiple
+
+Fichiers :
+
+`app/Views/client/transfert_multiple.php`
+
+`app/Services/OperationService.php`
+
+- [ ] Saisir plusieurs numéros
+- [ ] Refuser les doublons et les numéros invalides
+- [ ] Diviser le montant entre les destinataires
+- [ ] Calculer les frais pour chaque numéro
+- [ ] Confirmer tous les envois en une seule transaction
+
+---
+
+## 5. Mettre à jour les pages client
+
+Fichiers :
+
+`app/Views/client/dashboard.php`
+
+`app/Views/client/historique.php`
+
+- [ ] Ajouter un bouton « Envoi multiple »
+- [ ] Afficher les transferts vers les autres opérateurs
+- [ ] Afficher les commissions et les frais inclus
+- [ ] Regrouper les opérations d’un même envoi multiple
+
+---
+
+## 6. Tester et publier
+
+- [ ] Tester un transfert interne
+- [ ] Tester un transfert externe
+- [ ] Tester avec et sans frais de retrait
+- [ ] Tester un envoi vers plusieurs numéros
+- [ ] Vérifier le solde et l’historique
+- [ ] Mettre à jour `Taches.md`
+- [ ] Faire un commit après chaque grande étape
+- [ ] Publier la branche `feature/v2-client`
+
+---
+
+## Ordre conseillé
+
+1. Détection de l’opérateur
+2. Calcul des frais
+3. Transfert simple
+4. Envoi multiple
+5. Tableau de bord et historique
+6. Tests et publication
