@@ -65,6 +65,15 @@ a { text-decoration: none; }
 .transfer-detail-row:last-child { border-bottom: 0; }
 .transfer-detail-row small { display: block; color: var(--mm-muted); }
 .operator-badge { display: block; width: fit-content; margin-top: 4px; padding: 3px 8px; color: var(--mm-primary-dark); background: #ccfbf1; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+.recipient-list { display: grid; gap: 10px; }
+.recipient-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) 50px; align-items: center; gap: 10px; }
+.recipient-number { width: 30px; height: 30px; display: grid; place-items: center; color: var(--mm-primary-dark); background: #ccfbf1; border-radius: 50%; font-size: .8rem; font-weight: 800; }
+.recipient-counter { padding: 4px 9px; color: var(--mm-muted); background: #f8fafc; border: 1px solid var(--mm-line); border-radius: 999px; font-size: .78rem; font-weight: 700; }
+.btn-add-recipient { color: var(--mm-primary-dark); background: #f0fdfa; border: 1px dashed var(--mm-primary); }
+.btn-add-recipient:hover { color: #fff; background: var(--mm-primary); border-color: var(--mm-primary); }
+.btn-remove-recipient { min-height: 50px; color: var(--mm-ink); background: #f8fafc; border: 1px solid var(--mm-line); }
+.btn-remove-recipient:hover:not(:disabled) { color: #fff; background: var(--mm-ink); border-color: var(--mm-ink); }
+.btn-remove-recipient:disabled { opacity: .35; }
 
 @media (max-width: 767.98px) {
     .container-client, .page-shell { width: min(100% - 20px, 1120px); padding-top: 22px; }

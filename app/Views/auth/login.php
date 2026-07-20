@@ -20,7 +20,7 @@
                             <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-phone text-secondary"></i></span>
                             <input type="tel" class="form-control border-start-0" id="telephone" name="telephone" value="<?= esc(old('telephone')) ?>" placeholder="033 12 345 67" inputmode="numeric" autocomplete="tel" required autofocus>
                         </div>
-                        <div class="form-text mt-2">Préfixes acceptés : 033 et 037 · 10 chiffres</div>
+                        <div class="form-text mt-2">10 chiffres</div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg w-100">Continuer <i class="fa-solid fa-arrow-right ms-2"></i></button>
                 </form>
