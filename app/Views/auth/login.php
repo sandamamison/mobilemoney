@@ -38,7 +38,7 @@
                                 class="form-control form-control-lg <?= $validation->hasError('telephone') ? 'is-invalid' : '' ?>" 
                                 id="telephone" 
                                 name="telephone" 
-                                placeholder="033 XX XX XX ou 037 XX XX XX" 
+                                placeholder="033 12 345 67 ou 037 12 345 67" 
                                 value="<?= old('telephone') ?>"
                                 required
                                 autocomplete="off"
@@ -49,28 +49,8 @@
                                 </div>
                             <?php endif; ?>
                             <small class="form-text text-muted d-block mt-2">
-                                <i class="fas fa-info-circle"></i> Formats acceptés: 033XXXXXXXX, 037XXXXXXXX, ou 8-10 chiffres
+                                <i class="fas fa-info-circle"></i> Exemple : 0331234567 — Préfixes acceptés : 033 et 037
                             </small>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">
-                                <i class="fas fa-lock"></i> Mot de passe
-                            </label>
-                            <input 
-                                type="password" 
-                                class="form-control form-control-lg <?= $validation->hasError('password') ? 'is-invalid' : '' ?>" 
-                                id="password" 
-                                name="password" 
-                                placeholder="Votre mot de passe" 
-                                required
-                                autocomplete="current-password"
-                            >
-                            <?php if ($validation->hasError('password')): ?>
-                                <div class="invalid-feedback d-block">
-                                    <i class="fas fa-times-circle"></i> <?= $validation->getError('password') ?>
-                                </div>
-                            <?php endif; ?>
                         </div>
 
                         <div class="d-grid gap-2">
@@ -83,9 +63,7 @@
                     <hr class="my-4">
                     
                     <div class="text-center text-muted small">
-                        <p>
-                            <i class="fas fa-shield-alt"></i> Connexion sécurisée
-                        </p>
+                        <p><i class="fas fa-bolt"></i> Connexion automatique</p>
                     </div>
                 </div>
             </div>
@@ -96,7 +74,7 @@
                     <i class="fas fa-lightbulb"></i> Besoin d'aide?
                 </h6>
                 <small>
-                    Utilisez votre numéro de téléphone mobile enregistré et votre mot de passe pour accéder à votre compte.
+                    Saisissez simplement votre numéro de téléphone. Votre espace client sera créé automatiquement s'il n'existe pas encore.
                 </small>
             </div>
         </div>

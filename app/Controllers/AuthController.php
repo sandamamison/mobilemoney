@@ -49,24 +49,12 @@ class AuthController extends BaseController
         }
 
         $telephone = $this->request->getPost('telephone');
-        $password = $this->request->getPost('password');
-
         // Nettoyer le numéro
-        $telephoneClean = preg_replace('/[^0-9+]/', '', $telephone);
+        $telephoneClean = preg_replace('/\D/', '', (string) $telephone);
 
         // Valider le format
-        if (!preg_match('/^\d{10}$/', $telephoneClean) && !preg_match('/^\d{8}$/', $telephoneClean)) {
-            return redirect()->back()->withInput()->with('error', 'Le numéro doit contenir 8 ou 10 chiffres');
-        }
-
-        // Valider le password
-        if (empty($password)) {
-            return redirect()->back()->withInput()->with('error', 'Le mot de passe est requis');
-        }
-
-        // Si 8 chiffres, assumer préfixe 033
-        if (strlen($telephoneClean) === 8) {
-            $telephoneClean = '033' . $telephoneClean;
+        if (!preg_match('/^\d{10}$/', $telephoneClean)) {
+            return redirect()->back()->withInput()->with('error', 'Le numéro doit contenir exactement 10 chiffres');
         }
 
         // Extraire le préfixe
@@ -81,21 +69,15 @@ class AuthController extends BaseController
         $client = $this->clientModel->getByTelephone($telephoneClean);
 
         if (!$client) {
-            // Créer un nouveau client avec le password hashé
+            // Créer automatiquement le client
             if (!$this->clientModel->insert([
-                'telephone' => $telephoneClean, 
-                'password'  => password_hash($password, PASSWORD_DEFAULT),
+                'telephone' => $telephoneClean,
                 'statut'    => 'ACTIF'
             ])) {
                 return redirect()->back()->with('error', 'Erreur lors de la création du client');
             }
             $clientId = $this->clientModel->insertID();
             $client = $this->clientModel->find($clientId);
-        } else {
-            // Vérifier le mot de passe
-            if (!password_verify($password, $client['password'])) {
-                return redirect()->back()->withInput()->with('error', 'Mot de passe incorrect');
-            }
         }
 
         // Vérifier que le client n'est pas bloqué
