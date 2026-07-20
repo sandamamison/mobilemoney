@@ -123,12 +123,91 @@ class OperationController extends BaseController
             return redirect()->to('/login');
         }
 
-        return view('client/retrait', ['title' => 'Retrait']);
+        $compte = $this->compteModel->find(session()->get('compte_id'));
+
+        return view('client/retrait', [
+            'title' => 'Retrait',
+            'compte' => $compte,
+            'solde' => (int) ($compte['solde'] ?? 0),
+        ]);
     }
 
     public function doRetrait()
     {
-        return redirect()->to('/client/dashboard')->with('info', 'Fonctionnalité de retrait à venir');
+        if (!session()->get('is_logged_in')) {
+            return redirect()->to('/login');
+        }
+
+        $montant = (int) $this->request->getPost('montant');
+
+        if ($montant <= 0) {
+            return redirect()->back()->withInput()->with('error', 'Le montant du retrait doit être supérieur à 0');
+        }
+
+        $compteId = (int) session()->get('compte_id');
+        $compte = $this->compteModel->find($compteId);
+
+        if (!$compte) {
+            return redirect()->to('/client/dashboard')->with('error', 'Compte introuvable');
+        }
+
+        $typeRetrait = $this->typeOperationModel->getByCode('RETRAIT');
+        if (!$typeRetrait) {
+            $this->typeOperationModel->insert([
+                'code' => 'RETRAIT',
+                'libelle' => 'Retrait',
+                'avec_frais' => 1,
+                'actif' => 1,
+            ]);
+            $typeRetrait = $this->typeOperationModel->getByCode('RETRAIT');
+        }
+
+        $frais = $this->baremeFraisModel->getFraisForAmount($typeRetrait['id'], $montant);
+        $montantTotal = $montant + $frais;
+        $soldeAvant = (int) $compte['solde'];
+
+        if ($soldeAvant < $montantTotal) {
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant pour effectuer ce retrait');
+        }
+
+        $db = db_connect();
+        $db->transStart();
+
+        $reference = OperationModel::generateReference();
+        $operationId = $this->operationModel->insert([
+            'reference' => $reference,
+            'type_operation_id' => $typeRetrait['id'],
+            'compte_source_id' => $compteId,
+            'compte_destination_id' => null,
+            'montant' => $montant,
+            'frais' => $frais,
+            'statut' => 'VALIDEE',
+        ]);
+
+        if ($operationId === false) {
+            $db->transRollback();
+            return redirect()->back()->withInput()->with('error', 'Impossible d’enregistrer l’opération');
+        }
+
+        $soldeApres = $soldeAvant - $montantTotal;
+        $this->compteModel->update($compteId, ['solde' => $soldeApres]);
+
+        $this->mouvementModel->insert([
+            'operation_id' => $this->operationModel->insertID(),
+            'compte_id' => $compteId,
+            'sens' => MouvementCompteModel::DEBIT,
+            'montant' => $montantTotal,
+            'solde_avant' => $soldeAvant,
+            'solde_apres' => $soldeApres,
+        ]);
+
+        $db->transComplete();
+
+        if (!$db->transStatus()) {
+            return redirect()->back()->withInput()->with('error', 'Échec de l’enregistrement du retrait');
+        }
+
+        return redirect()->to('/client/dashboard')->with('success', 'Retrait enregistré avec succès');
     }
 
     public function transfert()
