@@ -280,11 +280,19 @@ class OperationController extends BaseController
     public function doTransfertMultiple()
     {
         try {
-            $texteNumeros = (string) $this->request->getPost('numeros');
-            $numeros = array_values(array_filter(array_map(
-                'trim',
-                preg_split('/[\r\n,;]+/', $texteNumeros) ?: [],
-            )));
+            $numerosSaisis = $this->request->getPost('numeros');
+            if (is_array($numerosSaisis)) {
+                $numeros = array_values(array_filter(array_map(
+                    static fn ($numero) => trim((string) $numero),
+                    $numerosSaisis,
+                )));
+            } else {
+                // Compatibilité avec l'ancien formulaire à zone de texte.
+                $numeros = array_values(array_filter(array_map(
+                    'trim',
+                    preg_split('/[\r\n,;]+/', (string) $numerosSaisis) ?: [],
+                )));
+            }
             $montantTotal = filter_var($this->request->getPost('montant_total'), FILTER_VALIDATE_INT);
             $inclureRetrait = $this->request->getPost('inclure_frais_retrait') === '1';
             if ($montantTotal === false || $montantTotal <= 0) {
@@ -308,7 +316,7 @@ class OperationController extends BaseController
                 'title' => 'Confirmer l’envoi multiple',
                 'solde' => (int) ($compte['solde'] ?? 0),
                 'resume' => $preparation,
-                'numeros_saisis' => implode("\n", $numeros),
+                'numeros_saisis' => $numeros,
             ]);
         } catch (\Throwable $e) {
             return redirect()->back()->withInput()->with('error', $e->getMessage());

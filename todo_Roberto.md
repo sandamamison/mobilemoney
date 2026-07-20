@@ -242,10 +242,10 @@ Fichier principal :
 
 `app/Services/DetectionOperateurService.php`
 
-- [ ] Vérifier le format du numéro
-- [ ] Lire les trois premiers chiffres
-- [ ] Identifier notre opérateur ou un autre opérateur
-- [ ] Refuser les préfixes inconnus ou désactivés
+- [X] Vérifier le format du numéro
+- [X] Lire les trois premiers chiffres
+- [X] Identifier notre opérateur ou un autre opérateur
+- [X] Refuser les préfixes inconnus ou désactivés
 
 ---
 
@@ -255,10 +255,10 @@ Fichier principal :
 
 `app/Services/FraisService.php`
 
-- [ ] Trouver les frais de transfert
-- [ ] Ajouter la commission pour un autre opérateur
-- [ ] Calculer les frais de retrait si l’option est cochée
-- [ ] Afficher le total à débiter
+- [X] Trouver les frais de transfert
+- [X] Ajouter la commission pour un autre opérateur
+- [X] Calculer les frais de retrait si l’option est cochée
+- [X] Afficher le total à débiter
 
 ---
 
@@ -270,10 +270,10 @@ Fichiers :
 
 `app/Views/client/transfert.php`
 
-- [ ] Ajouter l’option « Inclure les frais de retrait »
-- [ ] Afficher l’opérateur du destinataire
-- [ ] Afficher un résumé avant confirmation
-- [ ] Programmer le transfert interne et externe
+- [X] Ajouter l’option « Inclure les frais de retrait »
+- [X] Afficher l’opérateur du destinataire
+- [X] Afficher un résumé avant confirmation
+- [X] Programmer le transfert interne et externe
 
 ---
 
@@ -285,11 +285,11 @@ Fichiers :
 
 `app/Services/OperationService.php`
 
-- [ ] Saisir plusieurs numéros
-- [ ] Refuser les doublons et les numéros invalides
-- [ ] Diviser le montant entre les destinataires
-- [ ] Calculer les frais pour chaque numéro
-- [ ] Confirmer tous les envois en une seule transaction
+- [X] Saisir plusieurs numéros
+- [X] Refuser les doublons et les numéros invalides
+- [X] Diviser le montant entre les destinataires
+- [X] Calculer les frais pour chaque numéro
+- [X] Confirmer tous les envois en une seule transaction
 
 ---
 
@@ -301,31 +301,20 @@ Fichiers :
 
 `app/Views/client/historique.php`
 
-- [ ] Ajouter un bouton « Envoi multiple »
-- [ ] Afficher les transferts vers les autres opérateurs
-- [ ] Afficher les commissions et les frais inclus
-- [ ] Regrouper les opérations d’un même envoi multiple
+- [X] Ajouter un bouton « Envoi multiple »
+- [X] Afficher les transferts vers les autres opérateurs
+- [X] Afficher les commissions et les frais inclus
+- [X] Regrouper les opérations d’un même envoi multiple
 
 ---
 
 ## 6. Tester et publier
 
-- [ ] Tester un transfert interne
-- [ ] Tester un transfert externe
-- [ ] Tester avec et sans frais de retrait
-- [ ] Tester un envoi vers plusieurs numéros
-- [ ] Vérifier le solde et l’historique
-- [ ] Mettre à jour `Taches.md`
-- [ ] Faire un commit après chaque grande étape
-- [ ] Publier la branche `feature/v2-client`
+- [X] Tester un transfert interne
+- [X] Tester un transfert externe
+- [X] Tester avec et sans frais de retrait
+- [X] Tester un envoi vers plusieurs numéros
+- [X] Vérifier le solde et l’historique
+- [X] Mettre à jour `Taches.md`
 
 ---
-
-## Ordre conseillé
-
-1. Détection de l’opérateur
-2. Calcul des frais
-3. Transfert simple
-4. Envoi multiple
-5. Tableau de bord et historique
-6. Tests et publication
