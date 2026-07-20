@@ -28,6 +28,12 @@
                     </p>
 
                     <div class="d-flex flex-wrap gap-2">
+                        <a href="<?= base_url('/client/depot') ?>" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Dépôt
+                        </a>
+                        <a href="<?= base_url('/client/retrait') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-minus"></i> Retrait
+                        </a>
                         <a href="<?= base_url('/client/operations') ?>" class="btn btn-outline-primary">
                             <i class="fas fa-list"></i> Voir l'historique
                         </a>
