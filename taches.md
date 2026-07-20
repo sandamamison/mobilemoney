@@ -1,7 +1,8 @@
 
+
 # v1
 
-## Travaux communs
+## Miaraka
 
 - Configuration de CodeIgniter 4
 - Création du layout Bootstrap
@@ -11,7 +12,7 @@
 - Création du tag v1
 
 
-## Mamison Sanda Ny Ony
+## Sanda
 
 - Création de la base SQLite
 - Création du fichier base.sql
@@ -21,7 +22,7 @@
 - Affichage des comptes clients
 - Calcul des gains opérateur
 
-## RAKOTOMALALA Roberto Carlos
+## Roberto
 
 - Connexion automatique avec le numéro
 - Création automatique du client et du compte

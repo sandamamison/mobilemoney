@@ -6,3 +6,52 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
+
+// Routes d'authentification
+$routes->get('login', 'AuthController::index');
+$routes->get('connexion', 'AuthController::index');
+$routes->post('connexion', 'AuthController::connexion');
+$routes->get('auth/login', 'AuthController::index');
+$routes->post('auth/login', 'AuthController::connexion');
+$routes->get('deconnexion', 'AuthController::deconnexion');
+$routes->get('logout', 'AuthController::deconnexion');
+$routes->get('auth/logout', 'AuthController::deconnexion');
+
+// Routes client (protégées par ClientAuthFilter)
+$routes->group('client', ['filter' => 'clientauth'], function ($routes) {
+    $routes->get('dashboard', 'ClientController::dashboard');
+    $routes->get('operations', 'ClientController::operations');
+    $routes->get('depot', 'OperationController::depot');
+    $routes->post('depot', 'OperationController::doDepot');
+    $routes->get('retrait', 'OperationController::retrait');
+    $routes->post('retrait', 'OperationController::doRetrait');
+    $routes->get('transfert', 'OperationController::transfert');
+    $routes->post('transfert', 'OperationController::doTransfert');
+});
+$routes->get('/operateur', 'OperateurController::index');
+$routes->get('/gains', 'GainController::index');
+$routes->get('/gains/historique', 'GainController::historique');
+$routes->get('/prefixe', 'PrefixeController::index');
+$routes->get('/prefixe/create', 'PrefixeController::create');
+$routes->post('/prefixe/store', 'PrefixeController::store');
+$routes->post('/prefixe/delete', 'PrefixeController::delete');
+$routes->get('/typesoperation', 'TypeOperationController::index');
+$routes->get('/typesoperation/create', 'TypeOperationController::create');
+$routes->post('/typesoperation/store', 'TypeOperationController::store');
+$routes->post('/typesoperation/delete', 'TypeOperationController::delete');
+$routes->get('/typesoperation/edit/(:num)', 'TypeOperationController::edit/$1');
+$routes->post('/typesoperation/update/(:num)', 'TypeOperationController::update/$1');
+
+$routes->get('/bareme', 'BaremeController::index');
+$routes->get('/bareme/create', 'BaremeController::create');
+$routes->post('/bareme/store', 'BaremeController::store');
+$routes->get('/bareme/edit/(:num)', 'BaremeController::edit/$1');
+$routes->post('/bareme/update/(:num)', 'BaremeController::update/$1');
+$routes->post('/bareme/delete', 'BaremeController::delete');
+$routes->match(['get', 'post'], '/bareme/test', 'BaremeController::testFrais');
+$routes->get('/bareme/api/frais', 'BaremeController::apiFrais');
+
+$routes->get('/comptes', 'CompteController::index');
+$routes->get('/comptes/show/(:num)', 'CompteController::show/$1');
+$routes->post('/comptes/bloque/(:num)', 'CompteController::bloque/$1');
+$routes->post('/comptes/debloque/(:num)', 'CompteController::debloque/$1');
