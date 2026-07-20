@@ -233,4 +233,88 @@ Fichier :
 - [X] Afficher une erreur si aucune tranche n’existe
 - [X] Calculer :
 
-```text
+
+# PLAN SIMPLE — VERSION 2 CÔTÉ CLIENT
+
+## 1. Reconnaître l’opérateur du numéro
+
+Fichier principal :
+
+`app/Services/DetectionOperateurService.php`
+
+- [X] Vérifier le format du numéro
+- [X] Lire les trois premiers chiffres
+- [X] Identifier notre opérateur ou un autre opérateur
+- [X] Refuser les préfixes inconnus ou désactivés
+
+---
+
+## 2. Calculer les frais du transfert
+
+Fichier principal :
+
+`app/Services/FraisService.php`
+
+- [X] Trouver les frais de transfert
+- [X] Ajouter la commission pour un autre opérateur
+- [X] Calculer les frais de retrait si l’option est cochée
+- [X] Afficher le total à débiter
+
+---
+
+## 3. Améliorer le transfert simple
+
+Fichiers :
+
+`app/Controllers/OperationController.php`
+
+`app/Views/client/transfert.php`
+
+- [X] Ajouter l’option « Inclure les frais de retrait »
+- [X] Afficher l’opérateur du destinataire
+- [X] Afficher un résumé avant confirmation
+- [X] Programmer le transfert interne et externe
+
+---
+
+## 4. Créer l’envoi multiple
+
+Fichiers :
+
+`app/Views/client/transfert_multiple.php`
+
+`app/Services/OperationService.php`
+
+- [X] Saisir plusieurs numéros
+- [X] Refuser les doublons et les numéros invalides
+- [X] Diviser le montant entre les destinataires
+- [X] Calculer les frais pour chaque numéro
+- [X] Confirmer tous les envois en une seule transaction
+
+---
+
+## 5. Mettre à jour les pages client
+
+Fichiers :
+
+`app/Views/client/dashboard.php`
+
+`app/Views/client/historique.php`
+
+- [X] Ajouter un bouton « Envoi multiple »
+- [X] Afficher les transferts vers les autres opérateurs
+- [X] Afficher les commissions et les frais inclus
+- [X] Regrouper les opérations d’un même envoi multiple
+
+---
+
+## 6. Tester et publier
+
+- [X] Tester un transfert interne
+- [X] Tester un transfert externe
+- [X] Tester avec et sans frais de retrait
+- [X] Tester un envoi vers plusieurs numéros
+- [X] Vérifier le solde et l’historique
+- [X] Mettre à jour `Taches.md`
+
+---

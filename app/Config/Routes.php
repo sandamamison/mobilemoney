@@ -27,6 +27,8 @@ $routes->group('client', ['filter' => 'clientauth'], function ($routes) {
     $routes->post('retrait', 'OperationController::doRetrait');
     $routes->get('transfert', 'OperationController::transfert');
     $routes->post('transfert', 'OperationController::doTransfert');
+    $routes->get('transfert-multiple', 'OperationController::transfertMultiple');
+    $routes->post('transfert-multiple', 'OperationController::doTransfertMultiple');
 });
 $routes->get('/operateur', 'OperateurController::index');
 $routes->get('/gains', 'GainController::index');

@@ -11,7 +11,23 @@ class OperationModel extends Model
     protected $returnType       = 'array';
     protected $useAutoIncrement = true;
     protected $useSoftDeletes   = false;
-    protected $allowedFields    = ['reference', 'type_operation_id', 'compte_source_id', 'compte_destination_id', 'montant', 'frais', 'statut', 'date_operation'];
+    protected $allowedFields    = [
+        'reference',
+        'type_operation_id',
+        'compte_source_id',
+        'compte_destination_id',
+        'montant',
+        'frais',
+        'statut',
+        'date_operation',
+        'destinataire_telephone',
+        'operateur_destination',
+        'transfert_externe',
+        'frais_transfert',
+        'commission_externe',
+        'frais_retrait_inclus',
+        'groupe_reference',
+    ];
     protected $useTimestamps = false;
 
     /**

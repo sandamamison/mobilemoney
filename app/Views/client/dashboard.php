@@ -42,6 +42,9 @@
                         <a href="<?= base_url('/client/transfert') ?>" class="btn btn-outline-primary">
                             <i class="fas fa-arrow-right-arrow-left"></i> Transfert
                         </a>
+                        <a href="<?= base_url('/client/transfert-multiple') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-users"></i> Envoi multiple
+                        </a>
                         <a href="<?= base_url('/client/operations') ?>" class="btn btn-outline-primary">
                             <i class="fas fa-list"></i> Voir l'historique
                         </a>
@@ -64,24 +67,24 @@
 
                     <?php if (!empty($operations)) : ?>
                         <div class="list-group">
-                            <?php foreach ($operations as $operation) : ?>
+                            <?php foreach ($operations as $groupe) : ?>
                                 <div class="list-group-item d-flex justify-content-between align-items-start operation-card">
                                     <div>
                                         <div class="fw-bold">
-                                            <?= esc($operation['libelle'] ?? 'Opération') ?>
+                                            <?= $groupe['est_groupe'] ? '<i class="fa-solid fa-users me-1"></i> Envoi multiple' : esc($groupe['libelle']) ?>
                                         </div>
                                         <div class="text-muted small">
-                                            Ref: <?= esc($operation['reference'] ?? '') ?>
+                                            <?= $groupe['est_groupe'] ? $groupe['nombre_operations'] . ' destinataires · Groupe : ' . esc($groupe['groupe_reference']) : 'Réf. : ' . esc($groupe['reference']) ?>
                                         </div>
                                         <div class="text-muted small">
-                                            <?= esc($operation['date_operation'] ?? '') ?>
+                                            <?= esc($groupe['date_operation']) ?>
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <div class="fw-bold <?= ($operation['compte_source_id'] == session()->get('compte_id') ? 'text-danger' : 'text-success') ?>">
-                                            <?= ($operation['compte_source_id'] == session()->get('compte_id') ? '− ' : '+ ') ?><?= number_format((int) ($operation['montant'] ?? 0), 0, ',', ' ') ?> Ar
+                                        <div class="fw-bold <?= $groupe['est_sortante'] ? 'amount-out' : 'amount-in' ?>">
+                                            <?= $groupe['est_sortante'] ? '− ' : '+ ' ?><?= number_format($groupe['montant_total'] + ($groupe['est_sortante'] ? $groupe['frais_total'] : 0), 0, ',', ' ') ?> Ar
                                         </div>
-                                        <small class="text-muted">Statut: <?= esc($operation['statut'] ?? '') ?></small>
+                                        <?php if ($groupe['frais_total'] > 0): ?><small class="text-muted">dont <?= number_format($groupe['frais_total'], 0, ',', ' ') ?> Ar de frais</small><?php endif; ?>
                                     </div>
                                 </div>
                             <?php endforeach; ?>

@@ -12,7 +12,14 @@ class PrefixeModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['prefixe', 'actif', 'date_creation'];
+    protected $allowedFields    = [
+        'prefixe',
+        'actif',
+        'date_creation',
+        'nom_operateur',
+        'est_interne',
+        'commission_externe',
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,6 +39,11 @@ class PrefixeModel extends Model
         return $this->where('prefixe', $prefixe)
             ->where('actif', 1)
             ->first() !== null;
+    }
+
+    public function getByPrefixe(string $prefixe): ?array
+    {
+        return $this->where('prefixe', $prefixe)->first();
     }
 
     public function getActifs(): array
