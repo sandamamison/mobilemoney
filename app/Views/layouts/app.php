@@ -17,11 +17,13 @@
                 <span class="brand-mark"><i class="fa-solid fa-wallet"></i></span>
                 <span>MobiCash</span>
             </a>
-            <div class="d-flex align-items-center gap-3">
-                <a href="<?= base_url('/client/dashboard') ?>" class="nav-phone"><i class="fa-solid fa-house me-2"></i>Tableau de bord</a>
-                <span class="nav-phone"><i class="fa-solid fa-phone me-2"></i><?= esc(session()->get('telephone')) ?></span>
+            <div class="client-nav d-flex align-items-center gap-2">
+                <a href="<?= base_url('/client/dashboard') ?>" class="client-nav-link"><i class="fa-solid fa-house"></i><span>Accueil</span></a>
+                <a href="<?= base_url('/client/transfert') ?>" class="client-nav-link"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Transfert</span></a>
+                <a href="<?= base_url('/client/transfert-multiple') ?>" class="client-nav-link"><i class="fa-solid fa-users"></i><span>Envoi multiple</span></a>
+                <a href="<?= base_url('/client/operations') ?>" class="client-nav-link"><i class="fa-solid fa-clock-rotate-left"></i><span>Historique</span></a>
                 <a href="<?= base_url('/deconnexion') ?>" class="btn btn-sm btn-outline-light px-3">
-                    <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Quitter
+                    <i class="fa-solid fa-arrow-right-from-bracket me-1"></i><span class="logout-label"> Quitter</span>
                 </a>
             </div>
         </div>
