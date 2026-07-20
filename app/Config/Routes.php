@@ -73,3 +73,6 @@ $routes->get('/prefixes-externes/edit/(:num)', 'PrefixeAutreOperateurController:
 $routes->post('/prefixes-externes/update/(:num)', 'PrefixeAutreOperateurController::update/$1');
 $routes->post('/prefixes-externes/toggle/(:num)', 'PrefixeAutreOperateurController::toggleActif/$1');
 $routes->post('/prefixes-externes/delete', 'PrefixeAutreOperateurController::delete');
+
+// Routes Règlements (Montants à envoyer)
+$routes->get('/reglements', 'ReglementOperateurController::index');

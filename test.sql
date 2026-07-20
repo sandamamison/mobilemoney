@@ -135,8 +135,19 @@ VALUES
 -- │                              │ = −450 Ar (commissons > frais)│
 -- └──────────────────────────────┴──────────────────────────────┘
 --
--- Ce cas négatif est volontaire : il montre que les commissions
--- dépassent les frais collectés sur les transferts externes
--- → utile pour voir si le dashboard affiche bien les montants
---   à envoyer (tâche 4).
+-- ============================================================
+-- RÉSULTATS ATTENDUS sur /reglements
+-- ============================================================
+-- La commission se calcule uniquement sur le montant envoyé.
+-- Total à régler = montant envoyé + commission.
+-- Frais de retrait = 0 (pas de frais de retrait pour les autres opérateurs).
+--
+-- ┌─────────────┬──────────┬───────────┬─────────────┬────────────────┐
+-- │ Opérateur   │ Nb ops   │ Montant   │ Commission  │ Total à régler │
+-- ├─────────────┼──────────┼───────────┼─────────────┼────────────────┤
+-- │ Airtel Money│ 2        │ 70 000    │ 1 050       │ 71 050 Ar      │
+-- │ Orange Money│ 2        │ 110 000   │ 2 200       │ 112 200 Ar     │
+-- ├─────────────┼──────────┼───────────┼─────────────┼────────────────┤
+-- │ TOTAL       │ 4        │ 180 000   │ 3 250       │ 183 250 Ar     │
+-- └─────────────┴──────────┴───────────┴─────────────┴────────────────┘
 -- ============================================================

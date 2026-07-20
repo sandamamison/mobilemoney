@@ -14,6 +14,7 @@
         <a class="<?= $adminSection === 'typesoperation' ? 'active' : '' ?>" href="<?= site_url('typesoperation') ?>"><i class="fa-solid fa-list-check"></i> Types</a>
         <a class="<?= $adminSection === 'bareme' ? 'active' : '' ?>" href="<?= site_url('bareme') ?>"><i class="fa-solid fa-sliders"></i> Barèmes</a>
         <a class="<?= $adminSection === 'gains' && service('uri')->getSegment(2) === '' ? 'active' : '' ?>" href="<?= site_url('gains') ?>"><i class="fa-solid fa-chart-column"></i> Gains</a>
+        <a class="<?= $adminSection === 'reglements' ? 'active' : '' ?>" href="<?= site_url('reglements') ?>"><i class="fa-solid fa-paper-plane"></i> Règlements</a>
         <a class="<?= $adminSection === 'gains' && service('uri')->getSegment(2) === 'historique' ? 'active' : '' ?>" href="<?= site_url('gains/historique') ?>"><i class="fa-solid fa-clock-rotate-left"></i> Historique</a>
         <a class="admin-client-link" href="<?= site_url('login') ?>"><i class="fa-solid fa-user"></i> Client</a>
     </nav>

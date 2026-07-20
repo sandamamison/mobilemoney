@@ -164,4 +164,43 @@ class OperationModel extends Model
         return (int) array_sum(array_column($lignes, 'gain_net'));
     }
 
+    /**
+     * Montants à envoyer à chaque opérateur externe.
+     *
+     * Pour chaque opérateur :
+     *   - montant_total    = somme des montants transférés (ce qu'on doit envoyer)
+     *   - commission        = montant_total × (% commission)
+     *   - frais_retrait     = 0 (il n'y a pas de frais de retrait pour les autres opérateurs)
+     *   - total_a_regler    = montant_total + commission
+     */
+    public function montantsAEnvoyerParOperateur(): array
+    {
+        $sql = "SELECT
+                    ao.id AS operateur_id,
+                    ao.nom AS operateur_nom,
+                    ao.commission AS taux_commission,
+                    COUNT(o.id) AS nombre_operations,
+                    COALESCE(SUM(o.montant), 0) AS montant_total,
+                    ROUND(
+                        COALESCE(SUM(o.montant), 0) * ao.commission / 100.0
+                    ) AS commission_due,
+                    COALESCE(SUM(o.montant), 0) + ROUND(
+                        COALESCE(SUM(o.montant), 0) * ao.commission / 100.0
+                    ) AS total_a_regler
+                FROM operations o
+                JOIN types_operations t ON t.id = o.type_operation_id
+                JOIN comptes cdest ON cdest.id = o.compte_destination_id
+                JOIN clients cl ON cl.id = cdest.client_id
+                JOIN prefixes_autres_operateurs pao
+                    ON pao.actif = 1
+                    AND SUBSTR(cl.telephone, 1, LENGTH(pao.prefixe)) = pao.prefixe
+                JOIN autres_operateurs ao ON ao.id = pao.autre_operateur_id AND ao.actif = 1
+                WHERE t.code = 'TRANSFERT'
+                AND o.statut = 'VALIDEE'
+                AND o.compte_destination_id IS NOT NULL
+                GROUP BY ao.id, ao.nom, ao.commission
+                ORDER BY ao.nom ASC";
+        return $this->db->query($sql)->getResultArray();
+    }
+
 }
