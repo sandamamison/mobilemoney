@@ -1,4 +1,4 @@
--- Active: 1784546433576@@127.0.0.1@3306
+-- Active: 1784550262220@@127.0.0.1@3306
 DROP VIEW IF EXISTS vue_gains_operateur;
 DROP VIEW IF EXISTS vue_situation_comptes;
 
@@ -9,6 +9,16 @@ DROP TABLE IF EXISTS types_operations;
 DROP TABLE IF EXISTS comptes;
 DROP TABLE IF EXISTS clients;
 DROP TABLE IF EXISTS prefixes_operateur;
+DROP TABLE IF EXISTS autres_operateurs;
+
+CREATE TABLE autres_operateurs (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom        TEXT    NOT NULL UNIQUE,
+    commission REAL    NOT NULL DEFAULT 0 CHECK (commission >= 0 AND commission <= 100),
+    actif      INTEGER NOT NULL DEFAULT 1,
+    date_creation TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 
 CREATE TABLE prefixes_operateur (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -213,3 +223,8 @@ INSERT INTO mouvements_comptes (operation_id, compte_id, sens, montant, solde_av
 (2, 1, 'DEBIT', 50800, 550800, 500000),
 (3, 2, 'DEBIT', 10100, 160100, 150000),
 (3, 3, 'CREDIT', 10000, 10000, 20000);
+
+-- 5. Autres opérateurs (données de démonstration)
+INSERT INTO autres_operateurs (nom, commission, actif) VALUES
+('Airtel Money', 1.50, 1),
+('Orange Money', 2.00, 1);
