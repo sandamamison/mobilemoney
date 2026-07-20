@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class BaremeFraisModel extends Model
 {
-    protected $table            = 'baremefrais';
+    protected $table            = 'baremes_frais';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

@@ -1,4 +1,4 @@
--- Active: 1784526296721@@127.0.0.1@3306
+-- Active: 1784528047656@@127.0.0.1@3306
 DROP VIEW IF EXISTS vue_gains_operateur;
 DROP VIEW IF EXISTS vue_situation_comptes;
 
@@ -183,3 +183,33 @@ SELECT
 FROM types_operations
 CROSS JOIN tranches
 WHERE types_operations.code IN ('RETRAIT', 'TRANSFERT');
+
+-- ==========================================
+-- JEU DE DONNÉES POUR TESTER LE DASHBOARD
+-- ==========================================
+
+-- 1. Création de clients
+INSERT INTO clients (telephone, nom) VALUES
+('0341122233', 'Jean Dupont'),
+('0334455566', 'Marie Curie'),
+('0377788899', 'Alan Turing');
+
+-- 2. Création de comptes associés
+INSERT INTO comptes (client_id, solde) VALUES
+(1, 500000),
+(2, 150000),
+(3, 20000);
+
+-- 3. Création de quelques opérations 
+-- id 1 = DEPOT, id 2 = RETRAIT, id 3 = TRANSFERT
+INSERT INTO operations (reference, type_operation_id, compte_source_id, compte_destination_id, montant, frais, statut) VALUES
+('REF-001', 1, NULL, 1, 100000, 0, 'VALIDEE'), -- Dépôt sur le compte 1
+('REF-002', 2, 1, NULL, 50000, 800, 'VALIDEE'), -- Retrait depuis le compte 1 (Frais: 800)
+('REF-003', 3, 2, 3, 10000, 100, 'VALIDEE'); -- Transfert du compte 2 vers le compte 3 (Frais: 100)
+
+-- 4. Création des mouvements de comptes liés aux opérations
+INSERT INTO mouvements_comptes (operation_id, compte_id, sens, montant, solde_avant, solde_apres) VALUES
+(1, 1, 'CREDIT', 100000, 400000, 500000),
+(2, 1, 'DEBIT', 50800, 550800, 500000),
+(3, 2, 'DEBIT', 10100, 160100, 150000),
+(3, 3, 'CREDIT', 10000, 10000, 20000);

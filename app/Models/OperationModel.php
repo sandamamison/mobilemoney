@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ComptesModel extends Model
+class OperationModel extends Model
 {
-    protected $table            = 'comptes';
+    protected $table            = 'operations';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['client_id', 'solde', 'statut', 'date_creation'];
+    protected $allowedFields    = ['reference', 'type_operation_id', 'compte_source_id', 'compte_destination_id', 'montant', 'frais', 'statut', 'date_operation'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -20,8 +20,8 @@ class ComptesModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    public function sommesoldes(){
-        $sql = 'SELECT SUM(solde) AS total FROM comptes';
+    public function totalgain(){
+        $sql = 'SELECT SUM(frais) AS total FROM operations';
         $query = $this->db->query($sql);
         return $query->getRow()->total ?? 0;
     }
