@@ -138,17 +138,23 @@ class OperationController extends BaseController
             return redirect()->to('/login');
         }
 
-        $montant = (int) $this->request->getPost('montant');
+        $montantSaisi = $this->request->getPost('montant');
 
-        if ($montant <= 0) {
-            return redirect()->back()->withInput()->with('error', 'Le montant du retrait doit être supérieur à 0');
+        if (filter_var($montantSaisi, FILTER_VALIDATE_INT) === false || (int) $montantSaisi <= 0) {
+            return redirect()->back()->withInput()->with('error', 'Le montant du retrait doit être un entier supérieur à 0');
         }
+
+        $montant = (int) $montantSaisi;
 
         $compteId = (int) session()->get('compte_id');
         $compte = $this->compteModel->find($compteId);
 
         if (!$compte) {
             return redirect()->to('/client/dashboard')->with('error', 'Compte introuvable');
+        }
+
+        if (($compte['statut'] ?? null) !== 'ACTIF') {
+            return redirect()->back()->withInput()->with('error', 'Ce compte ne permet pas les retraits');
         }
 
         $typeRetrait = $this->typeOperationModel->getByCode('RETRAIT');

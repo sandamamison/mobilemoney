@@ -26,8 +26,8 @@ class BaremeFraisModel extends Model
     public function getFraisForAmount(int $typeOperationId, int $amount): int
     {
         $bareme = $this->where('type_operation_id', $typeOperationId)
-            ->where('montant_min', '<=', $amount)
-            ->where('montant_max', '>=', $amount)
+            ->where('montant_min <=', $amount)
+            ->where('montant_max >=', $amount)
             ->where('actif', 1)
             ->first();
 
