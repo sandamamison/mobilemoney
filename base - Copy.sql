@@ -13,6 +13,9 @@ CREATE TABLE prefixes_operateur (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     prefixe TEXT NOT NULL UNIQUE,
     actif INTEGER NOT NULL DEFAULT 1,
+    nom_operateur TEXT,
+    est_interne INTEGER NOT NULL DEFAULT 0,
+    commission_externe INTEGER NOT NULL DEFAULT 0,
     date_creation TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -66,6 +69,13 @@ CREATE TABLE operations (
     montant INTEGER NOT NULL,
     frais INTEGER NOT NULL DEFAULT 0,
     statut TEXT NOT NULL DEFAULT 'VALIDEE',
+    destinataire_telephone TEXT,
+    operateur_destination TEXT,
+    transfert_externe INTEGER NOT NULL DEFAULT 0,
+    frais_transfert INTEGER NOT NULL DEFAULT 0,
+    commission_externe INTEGER NOT NULL DEFAULT 0,
+    frais_retrait_inclus INTEGER NOT NULL DEFAULT 0,
+    groupe_reference TEXT,
     date_operation TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (type_operation_id)
@@ -136,10 +146,15 @@ GROUP BY
     types_operations.code,
     types_operations.libelle;
 
-INSERT INTO prefixes_operateur (prefixe)
+INSERT INTO prefixes_operateur (
+    prefixe,
+    nom_operateur,
+    est_interne,
+    commission_externe
+)
 VALUES
-    ('033'),
-    ('037');
+    ('033', 'MobiCash', 1, 0),
+    ('037', 'Opérateur partenaire', 0, 100);
 
 INSERT INTO types_operations (
     code,
