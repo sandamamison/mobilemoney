@@ -206,8 +206,10 @@
             table { display: block; overflow-x: auto; }
         }
     </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/backoffice.css?v=3') ?>">
 </head>
 <body>
+    <?= view('operateur/_header') ?>
     <nav class="navbar">
         <h1>MobileMoney</h1>
         <div>

@@ -112,8 +112,10 @@
         .btn-secondary { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.1); }
         .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
     </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/backoffice.css?v=3') ?>">
 </head>
 <body>
+    <?= view('operateur/_header') ?>
     <nav class="navbar">
         <h1>MobileMoney</h1>
         <div style="display: flex; gap: 2rem; align-items: center;">

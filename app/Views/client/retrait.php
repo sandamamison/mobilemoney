@@ -21,7 +21,7 @@
                     <?php endif; ?>
 
                     <div class="alert alert-info" role="alert">
-                        <strong>Solde actuel :</strong> <?= number_format($solde, 0, ',', ' ') ?> FCFA
+                        <strong>Solde actuel :</strong> <?= number_format($solde, 0, ',', ' ') ?> Ar
                     </div>
 
                     <form action="<?= base_url('/client/retrait') ?>" method="post">

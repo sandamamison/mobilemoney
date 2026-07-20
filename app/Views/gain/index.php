@@ -164,8 +164,10 @@
             .grid { grid-template-columns: 1fr; }
         }
     </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/backoffice.css?v=3') ?>">
 </head>
 <body>
+    <?= view('operateur/_header') ?>
     <nav class="navbar">
         <h1>MobileMoney</h1>
         <a href="<?= site_url('gains/historique') ?>">Historique global</a>

@@ -40,8 +40,10 @@
         .btn-success:hover { background:rgba(52,211,153,0.3); }
         .solde-cell { font-weight:700; color:#fbbf24; font-family:'Courier New',monospace; }
     </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/backoffice.css?v=3') ?>">
 </head>
 <body>
+    <?= view('operateur/_header') ?>
     <nav class="navbar">
         <h1>MobileMoney</h1>
         <div style="display:flex;gap:2rem;align-items:center;">

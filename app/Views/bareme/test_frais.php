@@ -52,8 +52,10 @@
         @keyframes spin { to { transform:rotate(360deg); } }
         .spin-icon { display:inline-block; animation:spin 0.8s linear infinite; margin-right:0.5rem; }
     </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/backoffice.css?v=3') ?>">
 </head>
 <body>
+    <?= view('operateur/_header') ?>
     <nav class="navbar">
         <h1>MobileMoney</h1>
         <div style="display:flex;gap:2rem;align-items:center;">

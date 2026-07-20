@@ -28,7 +28,7 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold <?= ($operation['compte_source_id'] == session()->get('compte_id') ? 'text-danger' : 'text-success') ?>">
-                                    <?= ($operation['compte_source_id'] == session()->get('compte_id') ? '-' : '+') ?><?= number_format((int) ($operation['montant'] ?? 0), 0, ',', ' ') ?> FCFA
+                                    <?= ($operation['compte_source_id'] == session()->get('compte_id') ? '− ' : '+ ') ?><?= number_format((int) ($operation['montant'] ?? 0), 0, ',', ' ') ?> Ar
                                 </div>
                                 <small class="text-muted">Statut: <?= esc($operation['statut'] ?? '') ?></small>
                             </div>

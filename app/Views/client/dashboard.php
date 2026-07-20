@@ -1,7 +1,12 @@
 <?= $this->extend('layouts/app') ?>
 
 <?= $this->section('content') ?>
-<div class="container container-client">
+<main class="container-client">
+    <header class="page-heading">
+        <div class="eyebrow">Vue d’ensemble</div>
+        <h1 class="page-title">Bonjour<?= !empty($client['nom']) ? ', ' . esc($client['nom']) : '' ?></h1>
+        <p class="page-subtitle">Gérez votre argent et consultez vos dernières opérations.</p>
+    </header>
     <div class="row g-4">
         <div class="col-lg-4">
             <div class="card balance-card shadow-sm">
@@ -10,7 +15,7 @@
                         <h5 class="mb-0"><i class="fas fa-wallet"></i> Solde disponible</h5>
                         <span class="badge bg-light text-dark">Compte #<?= esc($compte['id'] ?? '') ?></span>
                     </div>
-                    <div class="balance-display"><?= number_format($solde, 0, ',', ' ') ?> FCFA</div>
+                    <div class="balance-display"><?= number_format($solde, 0, ',', ' ') ?> <small class="fs-6">Ar</small></div>
                     <p class="mb-0">
                         <i class="fas fa-phone"></i> <?= esc($client['telephone'] ?? '') ?><br>
                         <small><?= esc($client['nom'] ?? 'Client') ?></small>
@@ -27,12 +32,12 @@
                         Gérez votre portefeuille, consultez votre solde et suivez vos dernières opérations en toute simplicité.
                     </p>
 
-                    <div class="d-flex flex-wrap gap-2">
+                    <div class="quick-actions">
                         <a href="<?= base_url('/client/depot') ?>" class="btn btn-success">
-                            <i class="fas fa-plus"></i> Dépôt
+                            <i class="fas fa-arrow-down"></i> Dépôt
                         </a>
                         <a href="<?= base_url('/client/retrait') ?>" class="btn btn-outline-primary">
-                            <i class="fas fa-minus"></i> Retrait
+                            <i class="fas fa-arrow-up"></i> Retrait
                         </a>
                         <a href="<?= base_url('/client/transfert') ?>" class="btn btn-outline-primary">
                             <i class="fas fa-arrow-right-arrow-left"></i> Transfert
@@ -74,7 +79,7 @@
                                     </div>
                                     <div class="text-end">
                                         <div class="fw-bold <?= ($operation['compte_source_id'] == session()->get('compte_id') ? 'text-danger' : 'text-success') ?>">
-                                            <?= ($operation['compte_source_id'] == session()->get('compte_id') ? '-' : '+') ?><?= number_format((int) ($operation['montant'] ?? 0), 0, ',', ' ') ?> FCFA
+                                            <?= ($operation['compte_source_id'] == session()->get('compte_id') ? '− ' : '+ ') ?><?= number_format((int) ($operation['montant'] ?? 0), 0, ',', ' ') ?> Ar
                                         </div>
                                         <small class="text-muted">Statut: <?= esc($operation['statut'] ?? '') ?></small>
                                     </div>
@@ -90,5 +95,5 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 <?= $this->endSection() ?>

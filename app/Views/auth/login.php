@@ -1,115 +1,34 @@
 <?= $this->extend('layouts/app') ?>
-
-<?php $validation = $validation ?? service('validation'); ?>
-
 <?= $this->section('content') ?>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg">
-                <div class="card-body p-5">
-                    <h2 class="card-title text-center mb-4">
-                        <i class="fas fa-mobile-alt"></i> Mobile Money
-                    </h2>
-                    
-                    <?php if (session()->has('error')): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="fas fa-exclamation-circle"></i> <?= session('error') ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    <?php endif; ?>
+<main class="auth-page">
+    <div class="auth-wrap">
+        <section class="auth-card">
+            <div class="card-body">
+                <div class="auth-brand"><span class="brand-mark"><i class="fa-solid fa-wallet"></i></span><span>MobiCash</span></div>
+                <div class="eyebrow">Espace client</div>
+                <h1 class="page-title">Bienvenue</h1>
+                <p class="page-subtitle mb-4">Accédez à votre compte avec votre numéro mobile.</p>
 
-                    <?php if (session()->has('success')): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle"></i> <?= session('success') ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    <?php endif; ?>
+                <?php if (session()->has('error')): ?><div class="alert alert-danger"><i class="fa-solid fa-circle-exclamation me-2"></i><?= esc(session('error')) ?></div><?php endif; ?>
+                <?php if (session()->has('success')): ?><div class="alert alert-success"><i class="fa-solid fa-circle-check me-2"></i><?= esc(session('success')) ?></div><?php endif; ?>
 
-                    <form action="<?= base_url('connexion') ?>" method="post" id="loginForm">
-                        <?= csrf_field() ?>
-                        
-                        <div class="mb-3">
-                            <label for="telephone" class="form-label">
-                                <i class="fas fa-phone"></i> Numéro de téléphone
-                            </label>
-                            <input 
-                                type="text" 
-                                class="form-control form-control-lg <?= $validation->hasError('telephone') ? 'is-invalid' : '' ?>" 
-                                id="telephone" 
-                                name="telephone" 
-                                placeholder="033 12 345 67 ou 037 12 345 67" 
-                                value="<?= old('telephone') ?>"
-                                required
-                                autocomplete="off"
-                            >
-                            <?php if ($validation->hasError('telephone')): ?>
-                                <div class="invalid-feedback d-block">
-                                    <i class="fas fa-times-circle"></i> <?= $validation->getError('telephone') ?>
-                                </div>
-                            <?php endif; ?>
-                            <small class="form-text text-muted d-block mt-2">
-                                <i class="fas fa-info-circle"></i> Exemple : 0331234567 — Préfixes acceptés : 033 et 037
-                            </small>
+                <form action="<?= base_url('connexion') ?>" method="post">
+                    <?= csrf_field() ?>
+                    <div class="mb-4">
+                        <label for="telephone" class="form-label">Numéro de téléphone</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-phone text-secondary"></i></span>
+                            <input type="tel" class="form-control border-start-0" id="telephone" name="telephone" value="<?= esc(old('telephone')) ?>" placeholder="033 12 345 67" inputmode="numeric" autocomplete="tel" required autofocus>
                         </div>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-sign-in-alt"></i> Se connecter
-                            </button>
-                        </div>
-                    </form>
-
-                    <hr class="my-4">
-                    
-                    <div class="text-center text-muted small">
-                        <p><i class="fas fa-bolt"></i> Connexion automatique</p>
+                        <div class="form-text mt-2">Préfixes acceptés : 033 et 037 · 10 chiffres</div>
                     </div>
-                </div>
-            </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Continuer <i class="fa-solid fa-arrow-right ms-2"></i></button>
+                </form>
 
-            <!-- Info Box -->
-            <div class="alert alert-info mt-4" role="alert">
-                <h6 class="alert-heading">
-                    <i class="fas fa-lightbulb"></i> Besoin d'aide?
-                </h6>
-                <small>
-                    Saisissez simplement votre numéro de téléphone. Votre espace client sera créé automatiquement s'il n'existe pas encore.
-                </small>
+                <div class="security-note"><i class="fa-solid fa-bolt text-primary mt-1"></i><span>Aucune inscription préalable. Votre compte est créé automatiquement à la première connexion.</span></div>
             </div>
-        </div>
+        </section>
+        <p class="text-center text-white-50 small mt-4 mb-0">Mobile Money simple, rapide et sécurisé</p>
     </div>
-</div>
-
-<style>
-    body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .card {
-        border: none;
-        border-radius: 10px;
-    }
-
-    .form-control:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        font-weight: 600;
-        transition: transform 0.2s;
-    }
-
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-</style>
+</main>
 <?= $this->endSection() ?>

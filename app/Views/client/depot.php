@@ -21,7 +21,7 @@
                     <?php endif; ?>
 
                     <div class="alert alert-info" role="alert">
-                        <strong>Solde actuel :</strong> <?= number_format($solde, 0, ',', ' ') ?> FCFA
+                        <strong>Solde actuel :</strong> <?= number_format($solde, 0, ',', ' ') ?> Ar
                     </div>
 
                     <form action="<?= base_url('/client/depot') ?>" method="post">
@@ -30,7 +30,7 @@
                         <div class="mb-3">
                             <label for="montant" class="form-label">Montant à déposer</label>
                             <input type="number" class="form-control" id="montant" name="montant" min="100" step="100" placeholder="Ex: 5000" required>
-                            <small class="form-text text-muted">Saisissez un montant en FCFA.</small>
+                            <small class="form-text text-muted">Saisissez un montant en ariary.</small>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex">
