@@ -74,4 +74,94 @@ class OperationModel extends Model
         return (int) ($query->getRow()->total ?? 0);
     }
 
+    /**
+     * Gains sur les retraits uniquement.
+     */
+    public function gainsRetraits(): array
+    {
+        $sql = "SELECT
+                    COUNT(o.id) AS nombre_operations,
+                    COALESCE(SUM(o.frais), 0) AS gain_total
+                FROM operations o
+                JOIN types_operations t ON t.id = o.type_operation_id
+                WHERE t.code = 'RETRAIT'
+                AND o.statut = 'VALIDEE'";
+        $row = $this->db->query($sql)->getRow();
+        return [
+            'nombre_operations' => (int) ($row->nombre_operations ?? 0),
+            'gain_total'        => (int) ($row->gain_total ?? 0),
+        ];
+    }
+
+    /**
+     * Gains sur les transferts INTERNES (destinataire sur notre réseau).
+     * Un transfert est interne si compte_destination_id IS NOT NULL et
+     * que le préfixe du destinataire n'est PAS dans prefixes_autres_operateurs.
+     */
+    public function gainsTransfertsInternes(): array
+    {
+        $sql = "SELECT
+                    COUNT(o.id) AS nombre_operations,
+                    COALESCE(SUM(o.frais), 0) AS gain_total
+                FROM operations o
+                JOIN types_operations t ON t.id = o.type_operation_id
+                JOIN comptes cdest ON cdest.id = o.compte_destination_id
+                JOIN clients cl ON cl.id = cdest.client_id
+                WHERE t.code = 'TRANSFERT'
+                AND o.statut = 'VALIDEE'
+                AND o.compte_destination_id IS NOT NULL
+                AND NOT EXISTS (
+                    SELECT 1 FROM prefixes_autres_operateurs pao
+                    WHERE pao.actif = 1
+                    AND SUBSTR(cl.telephone, 1, LENGTH(pao.prefixe)) = pao.prefixe
+                )";
+        $row = $this->db->query($sql)->getRow();
+        return [
+            'nombre_operations' => (int) ($row->nombre_operations ?? 0),
+            'gain_total'        => (int) ($row->gain_total ?? 0),
+        ];
+    }
+
+    /**
+     * Gains sur les transferts EXTERNES groupés par opérateur.
+     * Un transfert est externe si le préfixe du destinataire est dans prefixes_autres_operateurs.
+     * La commission de l'opérateur est déduite du gain net.
+     */
+    public function gainsTransfertsExternesParOperateur(): array
+    {
+        $sql = "SELECT
+                    ao.id AS operateur_id,
+                    ao.nom AS operateur_nom,
+                    ao.commission,
+                    COUNT(o.id) AS nombre_operations,
+                    COALESCE(SUM(o.montant), 0) AS montant_total,
+                    COALESCE(SUM(o.frais), 0) AS frais_total,
+                    COALESCE(SUM(o.frais), 0) - ROUND(
+                        COALESCE(SUM(o.montant), 0) * ao.commission / 100.0
+                    ) AS gain_net
+                FROM operations o
+                JOIN types_operations t ON t.id = o.type_operation_id
+                JOIN comptes cdest ON cdest.id = o.compte_destination_id
+                JOIN clients cl ON cl.id = cdest.client_id
+                JOIN prefixes_autres_operateurs pao
+                    ON pao.actif = 1
+                    AND SUBSTR(cl.telephone, 1, LENGTH(pao.prefixe)) = pao.prefixe
+                JOIN autres_operateurs ao ON ao.id = pao.autre_operateur_id AND ao.actif = 1
+                WHERE t.code = 'TRANSFERT'
+                AND o.statut = 'VALIDEE'
+                AND o.compte_destination_id IS NOT NULL
+                GROUP BY ao.id, ao.nom, ao.commission
+                ORDER BY ao.nom ASC";
+        return $this->db->query($sql)->getResultArray();
+    }
+
+    /**
+     * Total des gains nets sur transferts externes (après déduction des commissions).
+     */
+    public function gainNetTransfertsExternes(): int
+    {
+        $lignes = $this->gainsTransfertsExternesParOperateur();
+        return (int) array_sum(array_column($lignes, 'gain_net'));
+    }
+
 }

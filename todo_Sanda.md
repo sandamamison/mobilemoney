@@ -74,10 +74,10 @@ Fichiers principaux :
 
 `app/Views/operateur/autres_operateurs.php`
 
-- [ ] Ajouter les prÃ©fixes comme `032` et `031`
-- [ ] Associer chaque prÃ©fixe Ã  un opÃ©rateur
-- [ ] EmpÃªcher les doublons
-- [ ] Activer ou dÃ©sactiver un prÃ©fixe
+- [x] Ajouter les prÃ©fixes comme `032` et `031`
+- [x] Associer chaque prÃ©fixe Ã  un opÃ©rateur
+- [x] EmpÃªcher les doublons
+- [x] Activer ou dÃ©sactiver un prÃ©fixe
 
 ---
 
@@ -89,10 +89,10 @@ Fichiers principaux :
 
 `app/Views/operateur/gains.php`
 
-- [ ] Afficher les gains de notre opÃ©rateur
-- [ ] Afficher sÃ©parÃ©ment les gains des transferts externes
-- [ ] Afficher les frais de retrait
-- [ ] Afficher les commissions reÃ§ues par opÃ©rateur
+- [x] Afficher les gains de notre opÃ©rateur
+- [x] Afficher sÃ©parÃ©ment les gains des transferts externes
+- [x] Afficher les frais de retrait
+- [x] Afficher les commissions reÃ§ues par opÃ©rateur
 
 ---
 
