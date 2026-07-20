@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS types_operations;
 DROP TABLE IF EXISTS comptes;
 DROP TABLE IF EXISTS clients;
 DROP TABLE IF EXISTS prefixes_operateur;
+DROP TABLE IF EXISTS prefixes_autres_operateurs;
 DROP TABLE IF EXISTS autres_operateurs;
 
 CREATE TABLE autres_operateurs (
@@ -17,6 +18,18 @@ CREATE TABLE autres_operateurs (
     commission REAL    NOT NULL DEFAULT 0 CHECK (commission >= 0 AND commission <= 100),
     actif      INTEGER NOT NULL DEFAULT 1,
     date_creation TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE prefixes_autres_operateurs (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    prefixe              TEXT    NOT NULL UNIQUE,
+    autre_operateur_id   INTEGER NOT NULL,
+    actif                INTEGER NOT NULL DEFAULT 1,
+    date_creation        TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (autre_operateur_id)
+        REFERENCES autres_operateurs(id)
+        ON DELETE CASCADE
 );
 
 
@@ -228,3 +241,9 @@ INSERT INTO mouvements_comptes (operation_id, compte_id, sens, montant, solde_av
 INSERT INTO autres_operateurs (nom, commission, actif) VALUES
 ('Airtel Money', 1.50, 1),
 ('Orange Money', 2.00, 1);
+
+-- 6. Préfixes externes (données de démonstration)
+-- Les IDs ci-dessous supposent qu'Airtel Money = 1, Orange Money = 2
+INSERT INTO prefixes_autres_operateurs (prefixe, autre_operateur_id, actif) VALUES
+('032', 1, 1),
+('031', 2, 1);

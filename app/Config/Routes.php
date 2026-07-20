@@ -64,3 +64,12 @@ $routes->get('/autres-operateurs/edit/(:num)', 'AutreOperateurController::edit/$
 $routes->post('/autres-operateurs/update/(:num)', 'AutreOperateurController::update/$1');
 $routes->post('/autres-operateurs/toggle/(:num)', 'AutreOperateurController::toggleActif/$1');
 $routes->post('/autres-operateurs/delete', 'AutreOperateurController::delete');
+
+// Routes Préfixes Externes
+$routes->get('/prefixes-externes', 'PrefixeAutreOperateurController::index');
+$routes->get('/prefixes-externes/create', 'PrefixeAutreOperateurController::create');
+$routes->post('/prefixes-externes/store', 'PrefixeAutreOperateurController::store');
+$routes->get('/prefixes-externes/edit/(:num)', 'PrefixeAutreOperateurController::edit/$1');
+$routes->post('/prefixes-externes/update/(:num)', 'PrefixeAutreOperateurController::update/$1');
+$routes->post('/prefixes-externes/toggle/(:num)', 'PrefixeAutreOperateurController::toggleActif/$1');
+$routes->post('/prefixes-externes/delete', 'PrefixeAutreOperateurController::delete');
