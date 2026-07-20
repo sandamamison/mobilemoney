@@ -11,15 +11,7 @@ class OperationModel extends Model
     protected $returnType       = 'array';
     protected $useAutoIncrement = true;
     protected $useSoftDeletes   = false;
-    protected $allowedFields    = [
-        'reference',
-        'type_operation_id',
-        'compte_source_id',
-        'compte_destination_id',
-        'montant',
-        'frais',
-        'statut',
-    ];
+    protected $allowedFields    = ['reference', 'type_operation_id', 'compte_source_id', 'compte_destination_id', 'montant', 'frais', 'statut', 'date_operation'];
     protected $useTimestamps = false;
 
     /**
@@ -54,11 +46,6 @@ class OperationModel extends Model
     {
         return $this->where('reference', $reference)->first();
     }
-    protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['reference', 'type_operation_id', 'compte_source_id', 'compte_destination_id', 'montant', 'frais', 'statut', 'date_operation'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

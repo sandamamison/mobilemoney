@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\ClientModel;
 use App\Models\CompteModel;
-use App\Models\PrefixeOperateurModel;
+use App\Models\PrefixeModel;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -20,7 +20,7 @@ class AuthController extends BaseController
         parent::initController($request, $response, $logger);
         $this->clientModel = new ClientModel();
         $this->compteModel = new CompteModel();
-        $this->prefixeModel = new PrefixeOperateurModel();
+        $this->prefixeModel = new PrefixeModel();
     }
 
     /**

@@ -11,13 +11,8 @@ class BaremeFraisModel extends Model
     protected $returnType       = 'array';
     protected $useAutoIncrement = true;
     protected $useSoftDeletes   = false;
-    protected $allowedFields    = [
-        'type_operation_id',
-        'montant_min',
-        'montant_max',
-        'frais',
-        'actif',
-    ];
+    protected $allowedFields    = ['type_operation_id', 'montant_min', 'montant_max', 'frais', 'actif'];
+
     protected $useTimestamps = false;
 
     /**
@@ -43,12 +38,9 @@ class BaremeFraisModel extends Model
             ->where('actif', 1)
             ->orderBy('montant_min', 'ASC')
             ->findAll();
-    protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    }
     protected $protectFields    = true;
-    protected $allowedFields    = ['type_operation_id', 'montant_min', 'montant_max', 'frais', 'actif'];
-
+    
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 

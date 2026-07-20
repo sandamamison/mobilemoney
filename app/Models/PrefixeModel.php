@@ -27,4 +27,17 @@ class PrefixeModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
+    public function isPrefixActif(string $prefixe): bool
+    {
+        return $this->where('prefixe', $prefixe)
+            ->where('actif', 1)
+            ->first() !== null;
+    }
+
+    public function getActifs(): array
+    {
+        return $this->where('actif', 1)
+            ->findAll();
+    }
+
 }

@@ -2,7 +2,7 @@
 
 namespace App\Validation;
 
-use App\Models\PrefixeOperateurModel;
+use App\Models\PrefixeModel;
 
 /**
  * Classe pour valider les numéros de téléphone
@@ -61,7 +61,7 @@ class PhoneValidator
             return false;
         }
 
-        $prefixModel = new PrefixeOperateurModel();
+        $prefixModel = new PrefixeModel();
 
         return $prefixModel->isPrefixActif($prefix);
     }
@@ -82,8 +82,8 @@ class PhoneValidator
      */
     public static function getSupportedCountries()
     {
-        $prefixModel = new PrefixeOperateurModel();
-        return $prefixModel->where('actif', 1)->findAll();
+        $prefixModel = new PrefixeModel();
+        return $prefixModel->getActifs();
     }
 
     /**

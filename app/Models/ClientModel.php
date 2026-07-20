@@ -11,11 +11,7 @@ class ClientModel extends Model
     protected $returnType       = 'array';
     protected $useAutoIncrement = true;
     protected $useSoftDeletes   = false;
-    protected $allowedFields    = [
-        'telephone',
-        'nom',
-        'statut',
-    ];
+    protected $allowedFields    = ['telephone', 'nom', 'statut', 'date_creation'];
     protected $useTimestamps = false;
     protected $validationRules = [
         'telephone' => 'required|is_unique[clients.telephone]',
@@ -26,11 +22,8 @@ class ClientModel extends Model
     {
         return $this->where('telephone', $telephone)->first();
     }
-    protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['telephone', 'nom', 'statut', 'date_creation'];
+    
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
