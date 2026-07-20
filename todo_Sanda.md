@@ -104,10 +104,10 @@ Fichiers principaux :
 
 `app/Views/operateur/montants_a_envoyer.php`
 
-- [ ] Regrouper les transferts par opÃ©rateur
-- [ ] Additionner les montants envoyÃ©s
-- [ ] Ajouter les frais de retrait inclus
-- [ ] Afficher le total Ã  envoyer Ã  chaque opÃ©rateur
+- [x] Regrouper les transferts par opÃ©rateur
+- [x] Additionner les montants envoyÃ©s
+- [x] Ajouter les frais de retrait inclus
+- [x] Afficher le total Ã  envoyer Ã  chaque opÃ©rateur
 
 ---
 
@@ -117,24 +117,24 @@ Fichier principal :
 
 `app/Views/operateur/dashboard.php`
 
-- [ ] Ajouter le nombre dâ€™opÃ©rateurs externes
-- [ ] Ajouter les gains internes
-- [ ] Ajouter les gains externes
-- [ ] Ajouter les montants Ã  rÃ©gler
-- [ ] Ajouter les liens vers les nouvelles pages
+- [x] Ajouter le nombre dâ€™opÃ©rateurs externes
+- [x] Ajouter les gains internes
+- [x] Ajouter les gains externes
+- [x] Ajouter les montants Ã  rÃ©gler
+- [x] Ajouter les liens vers les nouvelles pages
 
 ---
 
 ## 6. Tester et publier
 
-- [ ] Tester lâ€™ajout dâ€™un opÃ©rateur
-- [ ] Tester lâ€™ajout dâ€™un prÃ©fixe
-- [ ] Tester la modification dâ€™une commission
-- [ ] VÃ©rifier la sÃ©paration des gains
-- [ ] VÃ©rifier les montants Ã  envoyer
-- [ ] Mettre Ã  jour `Taches.md`
-- [ ] Faire un commit aprÃ¨s chaque grande Ã©tape
-- [ ] Publier la branche `feature/v2-operateur`
+- [x] Tester lâ€™ajout dâ€™un opÃ©rateur
+- [x] Tester lâ€™ajout dâ€™un prÃ©fixe
+- [x] Tester la modification dâ€™une commission
+- [x] VÃ©rifier la sÃ©paration des gains
+- [x] VÃ©rifier les montants Ã  envoyer
+- [x] Mettre Ã  jour `Taches.md`
+- [x] Faire un commit aprÃ¨s chaque grande Ã©tape
+- [x] Publier la branche `feature/v2-operateur`
 
 ---
 
