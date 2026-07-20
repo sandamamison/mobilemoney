@@ -34,6 +34,9 @@
                         <a href="<?= base_url('/client/retrait') ?>" class="btn btn-outline-primary">
                             <i class="fas fa-minus"></i> Retrait
                         </a>
+                        <a href="<?= base_url('/client/transfert') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-right-arrow-left"></i> Transfert
+                        </a>
                         <a href="<?= base_url('/client/operations') ?>" class="btn btn-outline-primary">
                             <i class="fas fa-list"></i> Voir l'historique
                         </a>

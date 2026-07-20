@@ -25,5 +25,6 @@ $routes->group('client', ['filter' => 'clientauth'], function ($routes) {
     $routes->post('depot', 'OperationController::doDepot');
     $routes->get('retrait', 'OperationController::retrait');
     $routes->post('retrait', 'OperationController::doRetrait');
-    $routes->post('transfert', 'OperationController::transfert');
+    $routes->get('transfert', 'OperationController::transfert');
+    $routes->post('transfert', 'OperationController::doTransfert');
 });
