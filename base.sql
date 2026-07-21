@@ -1,4 +1,4 @@
--- Active: 1784550262220@@127.0.0.1@3306
+-- Active: 1784555908051@@127.0.0.1@3306
 DROP VIEW IF EXISTS vue_gains_operateur;
 DROP VIEW IF EXISTS vue_situation_comptes;
 
