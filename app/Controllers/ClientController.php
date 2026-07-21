@@ -118,4 +118,10 @@ class ClientController extends BaseController
 
         return array_slice(array_values($groupes), 0, $limite);
     }
+
+
+
+    public function pourcentage(){
+        return view('client/pourcentage');
+    }
 }

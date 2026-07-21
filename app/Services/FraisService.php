@@ -28,7 +28,7 @@ class FraisService
      *     total_debite: int
      * }
      */
-    public function calculerTransfert(int $montant, array $operateur, bool $inclureFraisRetrait = false): array
+    public function calculerTransfert(int $montant, array $operateur, bool $inclureFraisRetrait = false, int $pourcentage): array
     {
         if ($montant <= 0) {
             throw new InvalidArgumentException('Le montant doit être supérieur à zéro');
@@ -42,10 +42,15 @@ class FraisService
             ? $this->trouverFrais('RETRAIT', $montant)
             : 0;
 
+        $montantepargne = ($montant*$pourcentage)/100;
+
+        $montanttotalrecu = $montant-$montantepargne;
+
         $fraisTotal = $fraisTransfert + $commissionExterne + $fraisRetrait;
 
         return [
-            'montant' => $montant,
+            'montant' => $montanttotalrecu,
+            'montant_epargne' => $montantepargne,
             'frais_transfert' => $fraisTransfert,
             'commission_externe' => $commissionExterne,
             'frais_retrait' => $fraisRetrait,

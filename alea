@@ -1,0 +1,23 @@
+notion d'epargne
+pour chaque client izy misafidy % anle epargneny(samy manana pour chaque client)
+refa misy transfert makany aminy de le % amle vola azony makany amny epargne
+
+creer table mouvementepargne, creer table pourcentage_epargner
+
+mouvementepargne(
+    id
+    id_client
+    argent_epargne
+)
+
+pourcentage_epargner(
+    id
+    id_client
+    pourcentage
+)
+
+
+configurer les routes pour pourcentageepargner dans son controller mais le formulaire dans le controller du client
+faire la fonction store pour stocker dans la base ce pourcentage
+voir si c'est entrer dans la base
+puis creer une fonction qui va etre dans operationservice permettant l'entrer dans la table mouvementepargne et la deduction de l'argent recu du client qui recois l'argent

@@ -48,6 +48,9 @@
                         <a href="<?= base_url('/client/operations') ?>" class="btn btn-outline-primary">
                             <i class="fas fa-list"></i> Voir l'historique
                         </a>
+                        <a href="<?= base_url('/client/pourcentage') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-list"></i> Modifier pourcentage d'epargne
+                        </a>
                     </div>
                 </div>
             </div>

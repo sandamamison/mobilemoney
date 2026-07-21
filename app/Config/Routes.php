@@ -29,6 +29,7 @@ $routes->group('client', ['filter' => 'clientauth'], function ($routes) {
     $routes->post('transfert', 'OperationController::doTransfert');
     $routes->get('transfert-multiple', 'OperationController::transfertMultiple');
     $routes->post('transfert-multiple', 'OperationController::doTransfertMultiple');
+    $routes->get('pourcentage', 'ClientController::pourcentage');
 });
 $routes->get('/operateur', 'OperateurController::index');
 $routes->get('/gains', 'GainController::index');
@@ -78,3 +79,6 @@ $routes->post('/prefixes-externes/delete', 'PrefixeAutreOperateurController::del
 
 // Routes Règlements (Montants à envoyer)
 $routes->get('/reglements', 'ReglementOperateurController::index');
+
+
+$routes->post('pourcentage/add', 'PourcentageController::store');

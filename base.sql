@@ -247,3 +247,24 @@ INSERT INTO autres_operateurs (nom, commission, actif) VALUES
 INSERT INTO prefixes_autres_operateurs (prefixe, autre_operateur_id, actif) VALUES
 ('032', 1, 1),
 ('031', 2, 1);
+
+
+
+
+
+
+
+
+
+CREATE TABLE pourcentageepargnes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_client INTEGER,
+    pourcentage INTEGER
+);
+
+
+CREATE TABLE mouvementepargnes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_client INTEGER,
+    argentepargne INTEGER
+);
