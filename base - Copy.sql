@@ -197,3 +197,9 @@ SELECT
 FROM types_operations
 CROSS JOIN tranches
 WHERE types_operations.code IN ('RETRAIT', 'TRANSFERT');
+
+CREATE Table prommotion(
+    id INTEGER PRIMARY key AUTOINCREMENT,
+    libelle TEXT,
+    valeur INT NOT NULL DEFAULT 0
+)
